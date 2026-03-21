@@ -237,10 +237,11 @@ nav.scrolled {
 .theme-btn{background:none;border:1.5px solid var(--border);color:var(--muted);border-radius:12px;padding:0.4rem 0.8rem;cursor:pointer;font-size:1.1rem;margin-left:0.8rem;transition:all 0.3s;flex-shrink:0;display: flex; align-items: center; justify-content: center;}
 .theme-btn:hover{border-color:var(--purple);color:var(--purple);transform: rotate(15deg) scale(1.1);}
 .hamburger{display:none;background:none;border:none;cursor:pointer;color:var(--text);font-size:1.5rem;margin-left:0.5rem;}
-.mobile-menu{display:none;position:fixed;inset:0;background:var(--bg);z-index:900;padding:6rem 2rem 2rem;flex-direction:column;gap:0.5rem;overflow-y:auto;transform: translateY(-100%); transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1);}
+.mobile-menu{display:none;position:fixed;inset:0;background:var(--bg);z-index:9998;padding:6rem 2rem 2rem;flex-direction:column;gap:0.5rem;overflow-y:auto;transform: translateY(-100%); transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1);}
 .mobile-menu.open{display:flex; transform: translateY(0);}
-.mobile-menu button{background:none;border:none;cursor:pointer;color:var(--text);font-family:'Nunito',sans-serif;font-size:1.8rem;font-weight:800;padding:1rem;border-radius:15px;text-align:center;transition:all 0.3s;}
+.mobile-menu button{background:none;border:none;cursor:pointer;color:var(--text);font-family:'Nunito',sans-serif;font-size:1.8rem;font-weight:800;padding:1rem;border-radius:15px;text-align:center;transition:all 0.3s; width: 100%;}
 .mobile-menu button:hover{color:var(--purple);background:var(--purple-l);transform: scale(1.05);}
+.mobile-menu button.active{color:var(--purple);background:var(--purple-l);}
 
 /* PAGES */
 .page{display:none;padding-top:64px;min-height:100vh;}
@@ -558,10 +559,43 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
   .footer-inner{grid-template-columns:1fr 1fr;gap:3rem;}
   .footer-brand{grid-column:1/-1;text-align:center;align-items:center;}
   .footer-tagline{max-width:100%;}
+  
+  /* Disable custom cursor on mobile */
+  .cursor-dot, .cursor-outline { display: none !important; }
+  body, a, button, input, textarea, select, .btn, .card, .podcast-ep, .event-item, .team-card { cursor: auto !important; }
+  
+  /* Responsive Section Spacing */
+  .section { padding: 4rem 1.5rem !important; }
+  .hero { padding: 80px 1.5rem !important; }
+  .hero-glass, .glass-card, .founder-layout, .card { padding: 1.5rem !important; }
+  
+  /* Fix Storybook & Toolkit Grids (previously inline styles) */
+  #page-storybook [style*="display: grid"],
+  #page-toolkit [style*="display: grid"] {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+  
+  /* Reset 3D transforms on mobile to avoid scroll jank */
+  #interactive-book, .hero-glass, .glass-card {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Scale Book & Background Quote Typography */
+  .book-container { height: 450px !important; }
+  [style*="font-size: 25rem"] { font-size: 8rem !important; }
+  [style*="font-size: 10rem"] { font-size: 4rem !important; }
 }
 @media(max-width:640px){
-  .footer-inner{grid-template-columns:1fr;}
+  .footer-inner{grid-template-columns:1fr; text-align: center; justify-items: center;}
+  .footer-links{align-items: center;}
+  .footer-links a{width: auto;}
   .footer-bottom{flex-direction:column;gap:1.5rem;text-align:center;}
+
+  /* Optimize Grid Minimums to prevent overflow */
+  .card-grid-2, .card-grid-3 { grid-template-columns: 1fr !important; }
+  .card { padding: 1.5rem !important; }
 }
 
 /* ALERT */
@@ -721,7 +755,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
 
       <!-- ANIMATED SECTION 1: Global Challenge -->
       <div class="about-section" id="as-challenge" style="margin-top: 6rem; text-align: left;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+        <div class="card-grid card-grid-2" style="align-items: center;">
           <div class="glass-card reveal" style="padding: 3rem;">
             <span class="section-tag">The Global Challenge</span>
             <h2 class="section-title" style="font-size: 2.2rem; margin-top: 1rem;">Beyond <em>Stigma</em></h2>
@@ -1044,7 +1078,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         <p class="section-body reveal" style="margin-top: 1.5rem; font-size: 1.4rem; font-weight: 500; opacity: 0.7;">A Diary of Survival, Stigma, and the Strength of Being Different.</p>
       </div>
       
-      <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 8rem; align-items: start; margin-top: 5rem; text-align: left; position: relative;">
+      <div class="card-grid-2" style="align-items: start; margin-top: 5rem; text-align: left; position: relative;">
         <!-- Interactive Book Cover -->
         <div style="perspective: 2000px; position: sticky; top: 15vh; height: fit-content; will-change: transform; z-index: 10;">
           <div class="book-container" style="width: 100%; height: 650px; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); cursor: pointer;" id="interactive-book">
@@ -1099,17 +1133,17 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         </div>
       </div>
 
-      <div class="reveal" style="margin-top: 12rem; text-align: center; max-width: 1100px; margin-left: auto; margin-right: auto; background: var(--bg2); padding: 8rem 5rem; border-radius: 80px; border: 1px solid var(--border); position: relative; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.05);">
+      <div class="reveal" style="margin-top: 12rem; text-align: center; max-width: 1100px; margin-left: auto; margin-right: auto; background: var(--bg2); padding: 4rem 2rem; border-radius: 40px; border: 1px solid var(--border); position: relative; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.05); @media (min-width: 641px) { padding: 8rem 5rem; border-radius: 80px; }">
         <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at top right, var(--blue-l), transparent 70%); pointer-events: none;"></div>
         <div style="position: absolute; bottom:0; left:0; width:100%; height:100%; background: radial-gradient(circle at bottom left, var(--purple-l), transparent 70%); pointer-events: none;"></div>
         
-        <h2 class="section-title" style="font-size: 4rem; margin-bottom: 2rem; letter-spacing: -0.04em;">"Am I <em>Rude or Honest?</em>"</h2>
-        <p class="section-body" style="margin-bottom: 5rem; font-size: 1.4rem; max-width: 850px;">Lily doesn't do "comfortable lies." She notices the cracks in the tiles, the flickering lights, and the sadness behind people's smiles. Her story is a journey for anyone who has ever felt like they were wired differently.</p>
+        <h2 class="section-title" style="font-size: clamp(2.5rem, 8vw, 4rem); margin-bottom: 2rem; letter-spacing: -0.04em;">"Am I <em>Rude or Honest?</em>"</h2>
+        <p class="section-body" style="margin-bottom: 3rem; font-size: 1.2rem; max-width: 850px; line-height: 1.6; @media (min-width: 641px) { margin-bottom: 5rem; font-size: 1.4rem; }">Lily doesn't do "comfortable lies." She notices the cracks in the tiles, the flickering lights, and the sadness behind people's smiles. Her story is a journey for anyone who has ever felt like they were wired differently.</p>
         
-        <div style="display: inline-block; padding: 4rem 6rem; background: linear-gradient(135deg, var(--purple), #3B5FD4); border-radius: 50px; box-shadow: 0 50px 100px -20px rgba(59, 95, 212, 0.5); position: relative; z-index: 2;">
-          <h3 style="font-size: 2.2rem; margin-bottom: 1.5rem; color: white; font-weight: 900; letter-spacing: -0.03em; line-height: 1.2;">Stop Reading the Reports. <em>Start Reading the Story.</em></h3>
-          <p style="font-size: 1.2rem; opacity: 0.9; color: white; margin-bottom: 3rem;">Autism: Life Off Script is more than a book—it’s a challenge to the world.</p>
-          <a href="https://www.amazon.com/Autism-Script-Stories-Never-Textbooks/dp/B0GHXHW55C/ref=tmm_pap_swatch_0" target="_blank" class="btn btn-primary" style="background: white; color: #3B5FD4; padding: 1.5rem 4rem; font-size: 1.1rem; border-radius: 20px; font-weight: 900;">ORDER THE DIARY ON AMAZON</a>
+        <div style="display: inline-block; padding: 3rem 2rem; background: linear-gradient(135deg, var(--purple), #3B5FD4); border-radius: 30px; box-shadow: 0 50px 100px -20px rgba(59, 95, 212, 0.5); position: relative; z-index: 2; width: 100%; box-sizing: border-box; @media (min-width: 641px) { padding: 4rem 6rem; border-radius: 50px; width: auto; }">
+          <h3 style="font-size: clamp(1.5rem, 5vw, 2.2rem); margin-bottom: 1.5rem; color: white; font-weight: 900; letter-spacing: -0.03em; line-height: 1.2;">Stop Reading the Reports. <br><em>Start Reading the Story.</em></h3>
+          <p style="font-size: 1.1rem; opacity: 0.9; color: white; margin-bottom: 2.5rem;">Autism: Life Off Script is more than a book—it’s a challenge to the world.</p>
+          <a href="https://www.amazon.com/Autism-Script-Stories-Never-Textbooks/dp/B0GHXHW55C/ref=tmm_pap_swatch_0" target="_blank" class="btn btn-primary" style="background: white; color: #3B5FD4; padding: 1.2rem 2rem; font-size: 1rem; border-radius: 15px; font-weight: 900; display: block; @media (min-width: 641px) { display: inline-block; padding: 1.5rem 4rem; font-size: 1.1rem; border-radius: 20px; }">ORDER THE DIARY ON AMAZON</a>
         </div>
       </div>
     </div>
@@ -1273,8 +1307,12 @@ function showPage(id){
     document.getElementById('page-'+p).classList.toggle('active',p===id);
     const b=document.getElementById('nav-'+p);
     if(b)b.classList.toggle('active',p===id);
+    const mb=document.getElementById('mobileMenu').querySelector(`button[onclick*="'${p}'"]`);
+    if(mb)mb.classList.toggle('active',p===id);
   });
   window.scrollTo({top:0,behavior:'smooth'});
+  const m=document.getElementById('mobileMenu');
+  if(m.classList.contains('open')) toggleMenu();
   if(id==='about')setTimeout(animateAbout,400);
 }
 
@@ -1438,6 +1476,7 @@ function initBook3D() {
   if (!book) return;
 
   book.addEventListener('mousemove', (e) => {
+    if (window.innerWidth < 960) return;
     const rect = book.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
@@ -1450,6 +1489,10 @@ function initBook3D() {
   });
 
   book.addEventListener('mouseleave', () => {
+    if (window.innerWidth < 960) {
+      book.style.transform = "none";
+      return;
+    }
     book.style.transform = `perspective(2000px) rotateX(0deg) rotateY(-5deg) scale3d(1, 1, 1)`;
   });
 }
@@ -1458,12 +1501,17 @@ initBook3D();
 // Magnetic Effect for Glass Panels
 document.querySelectorAll('.hero-glass, .glass-card').forEach(el => {
   el.addEventListener('mousemove', (e) => {
+    if (window.innerWidth < 960) return;
     const rect = el.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
     el.style.transform = `perspective(1000px) rotateY(${x / 30}deg) rotateX(${-y / 30}deg) translateZ(10px)`;
   });
   el.addEventListener('mouseleave', () => {
+    if (window.innerWidth < 960) {
+      el.style.transform = "none";
+      return;
+    }
     el.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg) translateZ(0)`;
   });
 });
