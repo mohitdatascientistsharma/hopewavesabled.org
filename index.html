@@ -15,14 +15,14 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://bhaveshbasrani.github.io/HOPE/">
 <meta property="og:title" content="HOPE — Every Voice Counts, Every Mind Matters">
-<meta property="og:description" content="Dismantling stigma and building a world that works for everyone. Explore our toolkits, podcasts, and survival stories.">
+<meta property="og:description" content="Dismantling stigma and building a world that works for everyone. Explore our toolkits and survival stories.">
 <meta property="og:image" content="https://bhaveshbasrani.github.io/HOPE/images/Logo.svg">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="https://bhaveshbasrani.github.io/HOPE/">
 <meta property="twitter:title" content="HOPE — Every Voice Counts, Every Mind Matters">
-<meta property="twitter:description" content="Dismantling stigma and building a world that works for everyone. Explore our toolkits, podcasts, and survival stories.">
+<meta property="twitter:description" content="Dismantling stigma and building a world that works for everyone. Explore our toolkits and survival stories.">
 <meta property="twitter:image" content="https://bhaveshbasrani.github.io/HOPE/images/Logo.svg">
 
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
@@ -496,27 +496,6 @@ nav.scrolled {
 .dl-btn{margin-left:auto;flex-shrink:0;background:var(--purple-l);color:var(--purple);border:1.5px solid rgba(123,53,194,0.25);border-radius:8px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:background 0.2s;}
 .dl-btn:hover{background:rgba(123,53,194,0.2);}
 
-/* PODCAST */
-.podcast-ep{display:flex;align-items:center;gap:1.5rem;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:0.9rem;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:var(--shadow);cursor:pointer;}
-.podcast-ep:hover{border-color:var(--blue);box-shadow:0 6px 20px rgba(59,95,212,0.1);}
-.ep-num{width:52px;height:52px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-family:'Avallon Alt',cursive;font-size:1.1rem;font-weight:700;color:#fff;}
-.ep-info{flex:1;}
-.ep-info h3{font-size:0.98rem;font-weight:800;margin-bottom:0.25rem;}
-.ep-info p{font-size:0.82rem;color:var(--muted);}
-.ep-duration{font-size:0.78rem;color:var(--muted);flex-shrink:0;}
-.play-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));border:none;cursor:pointer;color:#fff;font-size:0.95rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:transform 0.2s;box-shadow:0 4px 12px rgba(123,53,194,0.3);}
-.play-btn:hover{transform:scale(1.12);}
-
-/* BLOG */
-.blog-card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;transition:transform 0.25s,box-shadow 0.25s;box-shadow:var(--shadow);}
-.blog-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.1);}
-.blog-thumb{height:140px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;}
-.blog-body{padding:1.4rem;}
-.blog-tag{font-size:0.7rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.7rem;border-radius:50px;margin-bottom:0.8rem;display:inline-block;}
-.blog-body h3{font-size:0.98rem;font-weight:800;margin-bottom:0.5rem;line-height:1.4;}
-.blog-body p{font-size:0.85rem;color:var(--muted);line-height:1.65;}
-.blog-meta{font-size:0.75rem;color:var(--muted);margin-top:0.9rem;font-weight:600;}
-
 /* FORMS */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
 .form-group{display:flex;flex-direction:column;gap:0.45rem;}
@@ -590,7 +569,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
 .success-toast.show{transform:translateY(0);opacity:1;}
 
 @media(max-width:960px){.nav-links{display:none;}.hamburger{display:block;}}
-@media(max-width:640px){.form-grid{grid-template-columns:1fr;}.form-group.full{grid-column:1;}.event-item{flex-direction:column;}.podcast-ep{flex-wrap:wrap;}.hero-logo{width:160px;height:160px;}}
+@media(max-width:640px){.form-grid{grid-template-columns:1fr;}.form-group.full{grid-column:1;}.event-item{flex-direction:column;}.hero-logo{width:160px;height:160px;}}
 </style>
 </head>
 <body class="loading">
@@ -612,9 +591,8 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
     <div class="nav-links" id="navLinks">
       <button onclick="showPage('home')" class="active" id="nav-home">Home</button>
       <button onclick="showPage('about')" id="nav-about">About</button>
+      <button onclick="showPage('message')" id="nav-message">Message</button>
       <button onclick="showPage('toolkit')" id="nav-toolkit">Toolkit</button>
-      <button onclick="showPage('podcast')" id="nav-podcast">Podcast</button>
-      <button onclick="showPage('blog')" id="nav-blog">Blog</button>
       <button onclick="showPage('volunteer')" id="nav-volunteer">Volunteer</button>
       <button onclick="showPage('storybook')" id="nav-storybook">Storybook</button>
       <button onclick="showPage('events')" id="nav-events">Events</button>
@@ -628,9 +606,8 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
 <div class="mobile-menu" id="mobileMenu">
   <button onclick="showPage('home');toggleMenu()">Home</button>
   <button onclick="showPage('about');toggleMenu()">About Us</button>
+  <button onclick="showPage('message');toggleMenu()">Founder's Message</button>
   <button onclick="showPage('toolkit');toggleMenu()">Inclusion Toolkit</button>
-  <button onclick="showPage('podcast');toggleMenu()">Podcast</button>
-  <button onclick="showPage('blog');toggleMenu()">Blog</button>
   <button onclick="showPage('volunteer');toggleMenu()">Volunteer Sign-Up</button>
   <button onclick="showPage('storybook');toggleMenu()">Storybook</button>
   <button onclick="showPage('events');toggleMenu()">Events</button>
@@ -664,7 +641,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
       <div class="stats">
         <div class="stat"><div class="stat-num" data-target="10" data-suffix="+">0</div><div class="stat-label">In Podcasts</div></div>
         <div class="stat"><div class="stat-num" data-target="10" data-suffix="k+">0</div><div class="stat-label">Reached Worldwide</div></div>
-        <div class="stat"><div class="stat-num" data-target="4" data-suffix="+">0</div><div class="stat-label">Countries</div></div>
+        <div class="stat"><div class="stat-num" data-target="15" data-suffix="+">0</div><div class="stat-label">Countries</div></div>
         <div class="stat"><div class="stat-num" data-target="1" data-suffix="">0</div><div class="stat-label">Unified Blueprint</div></div>
       </div>
     </div>
@@ -708,6 +685,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         <div class="footer-links">
           <a href="#" onclick="showPage('home');return false">Home</a>
           <a href="#" onclick="showPage('about');return false">About</a>
+          <a href="#" onclick="showPage('message');return false">Message</a>
           <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
           <a href="#" onclick="showPage('team');return false">Team</a>
         </div>
@@ -716,7 +694,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         <h4>Impact</h4>
         <div class="footer-links">
           <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
-          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
+          
           <a href="#" onclick="showPage('storybook');return false">Storybook</a>
           <a href="#" onclick="showPage('events');return false">Events</a>
         </div>
@@ -803,23 +781,27 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         </div>
       </div>
 
-      <!-- ANIMATED SECTION 4: Founder's Message -->
-      <div class="about-section reveal" id="as-founder" style="margin-top: 8rem; margin-bottom: 4rem;">
-        <div class="founder-layout">
-          <div class="founder-image-wrapper">
-            <img src="images/Founder.jpg" alt="Toshani Sharma">
-          </div>
-          <div class="founder-text-content">
-            <span class="section-tag">A Message from Our Founder</span>
-            <div class="founder-quote-large">"The world wasn't built for every brain—but together, we can redesign it."</div>
-            <p class="founder-message-p">I started HOPE because I was tired of seeing brilliant minds silenced by a single word: stigma. Whether it is Autism, ADHD, Epilepsy, or Dementia, we live in a society that often fears what it doesn't understand.</p>
-            <p class="founder-message-p">We’ve spent years talking about "awareness," but awareness hasn't fixed the systems that sideline neurodivergent people. It hasn't stopped the isolation, and it hasn't opened the doors that remain locked for so many in our community.</p>
-            <p class="founder-message-p">HOPE is a youth-led refusal to accept that status quo. We aren't here to "fix" people; we are here to fix a broken world. This isn't just a project for me—it’s a mission to ensure that no one ever has to feel like their neurological identity is a deficit.</p>
-            <p class="founder-message-p" style="font-weight: 700;">Toshani Sharma <br><span style="font-weight: 400; opacity: 0.7;">Founder, HOPE</span></p>
-          </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══ MESSAGE ══ -->
+<div id="page-message" class="page">
+  <section class="section">
+    <div class="container">
+      <div class="founder-layout" style="margin-top: 2rem;">
+        <div class="founder-image-wrapper">
+          <img src="images/Founder.jpg" alt="Toshani Sharma">
+        </div>
+        <div class="founder-text-content">
+          <span class="section-tag">A Message from Our Founder</span>
+          <div class="founder-quote-large">"The world wasn't built for every brain—but together, we can redesign it."</div>
+          <p class="founder-message-p">I started HOPE because I was tired of seeing brilliant minds silenced by a single word: stigma. Whether it is Autism, ADHD, Epilepsy, or Dementia, we live in a society that often fears what it doesn't understand.</p>
+          <p class="founder-message-p">We’ve spent years talking about "awareness," but awareness hasn't fixed the systems that sideline neurodivergent people. It hasn't stopped the isolation, and it hasn't opened the doors that remain locked for so many in our community.</p>
+          <p class="founder-message-p">HOPE is a youth-led refusal to accept that status quo. We aren't here to "fix" people; we are here to fix a broken world. This isn't just a project for me—it’s a mission to ensure that no one ever has to feel like their neurological identity is a deficit.</p>
+          <p class="founder-message-p" style="font-weight: 700;">Toshani Sharma <br><span style="font-weight: 400; opacity: 0.7;">Founder, HOPE</span></p>
         </div>
       </div>
-
     </div>
   </section>
   <footer>
@@ -833,6 +815,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         <div class="footer-links">
           <a href="#" onclick="showPage('home');return false">Home</a>
           <a href="#" onclick="showPage('about');return false">About</a>
+          <a href="#" onclick="showPage('message');return false">Message</a>
           <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
           <a href="#" onclick="showPage('team');return false">Team</a>
         </div>
@@ -841,7 +824,6 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         <h4>Impact</h4>
         <div class="footer-links">
           <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
-          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
           <a href="#" onclick="showPage('storybook');return false">Storybook</a>
           <a href="#" onclick="showPage('events');return false">Events</a>
         </div>
@@ -909,6 +891,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         <div class="footer-links">
           <a href="#" onclick="showPage('home');return false">Home</a>
           <a href="#" onclick="showPage('about');return false">About</a>
+          <a href="#" onclick="showPage('message');return false">Message</a>
           <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
           <a href="#" onclick="showPage('team');return false">Team</a>
         </div>
@@ -917,115 +900,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         <h4>Impact</h4>
         <div class="footer-links">
           <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
-          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
-          <a href="#" onclick="showPage('storybook');return false">Storybook</a>
-          <a href="#" onclick="showPage('events');return false">Events</a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2026 HOPE — Youth-Led Advocacy</p>
-      <div style="display:flex;gap:1.5rem">
-        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" style="color:inherit;text-decoration:none">Back to Top ↑</a>
-      </div>
-    </div>
-  </footer>
-</div>
-
-<!-- ══ PODCAST ══ -->
-<div id="page-podcast" class="page">
-  <section class="section">
-    <div class="container">
-      <span class="section-tag">Listen & Learn</span>
-      <h1 class="section-title">The HOPE <em>Podcast</em></h1>
-      <p class="section-body">Real conversations about neurodiversity, inclusion, parenting, advocacy, and living authentically. New episodes every week.</p>
-      <div class="rainbow-bar"></div>
-      <div style="margin:2.5rem 0">
-        <div class="podcast-ep"><div class="ep-num">EP 42</div><div class="ep-info"><h3>Unmasking at Work: Finding Your Authentic Self</h3><p>Dr. Sarah Chen on the psychological cost of masking and authentic self-expression in professional settings.</p></div><div class="ep-duration">48 min</div><button class="play-btn">▶</button></div>
-        <div class="podcast-ep"><div class="ep-num">EP 41</div><div class="ep-info"><h3>Late Diagnosis: The Gift and Grief of Knowing</h3><p>Three adults share their stories of receiving an autism or ADHD diagnosis after age 30.</p></div><div class="ep-duration">62 min</div><button class="play-btn">▶</button></div>
-        <div class="podcast-ep"><div class="ep-num">EP 40</div><div class="ep-info"><h3>Building Inclusive Schools: A Principal's Perspective</h3><p>How systemic changes transformed one school's approach to supporting neurodivergent students.</p></div><div class="ep-duration">55 min</div><button class="play-btn">▶</button></div>
-        <div class="podcast-ep"><div class="ep-num">EP 39</div><div class="ep-info"><h3>The Sensory World: What It Really Feels Like</h3><p>Autistic adults describe their sensory experiences and what creates more sensory-friendly environments.</p></div><div class="ep-duration">44 min</div><button class="play-btn">▶</button></div>
-        <div class="podcast-ep"><div class="ep-num">EP 38</div><div class="ep-info"><h3>Parenting the Child You Didn't Expect</h3><p>An honest conversation about parenting a neurodivergent child and the growth it brings.</p></div><div class="ep-duration">51 min</div><button class="play-btn">▶</button></div>
-      </div>
-      <div class="card-grid card-grid-3">
-        <div class="card"><div class="card-icon">🎧</div><h3>Spotify</h3><p>Stream all episodes — available on all devices.</p><br><button class="btn btn-outline" style="font-size:0.8rem;padding:0.5rem 1.2rem">Listen on Spotify</button></div>
-        <div class="card"><div class="card-icon">🍎</div><h3>Apple Podcasts</h3><p>Subscribe and never miss an episode.</p><br><button class="btn btn-outline" style="font-size:0.8rem;padding:0.5rem 1.2rem">Apple Podcasts</button></div>
-        <div class="card"><div class="card-icon">▶️</div><h3>YouTube</h3><p>Watch full video episodes on our channel.</p><br><button class="btn btn-outline" style="font-size:0.8rem;padding:0.5rem 1.2rem">Watch on YouTube</button></div>
-      </div>
-    </div>
-  </section>
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <div class="footer-logo">HOPE</div>
-        <p class="footer-tagline">Redesigning the systems, not the people. Every voice counts, every mind matters.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Explore</h4>
-        <div class="footer-links">
-          <a href="#" onclick="showPage('home');return false">Home</a>
-          <a href="#" onclick="showPage('about');return false">About</a>
-          <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
-          <a href="#" onclick="showPage('team');return false">Team</a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4>Impact</h4>
-        <div class="footer-links">
-          <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
-          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
-          <a href="#" onclick="showPage('storybook');return false">Storybook</a>
-          <a href="#" onclick="showPage('events');return false">Events</a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2026 HOPE — Youth-Led Advocacy</p>
-      <div style="display:flex;gap:1.5rem">
-        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" style="color:inherit;text-decoration:none">Back to Top ↑</a>
-      </div>
-    </div>
-  </footer>
-</div>
-
-<!-- ══ BLOG ══ -->
-<div id="page-blog" class="page">
-  <section class="section">
-    <div class="container">
-      <span class="section-tag">Stories & Insights</span>
-      <h1 class="section-title">The HOPE <em>Blog</em></h1>
-      <p class="section-body">Perspectives from advocates, parents, educators, and neurodivergent voices on inclusion, belonging, and living authentically.</p>
-      <div class="rainbow-bar"></div>
-      <div class="card-grid card-grid-3" style="margin-top:2rem">
-        <div class="blog-card"><div class="blog-thumb" style="background:linear-gradient(135deg,var(--purple-l),var(--blue-l))">📝</div><div class="blog-body"><span class="blog-tag" style="background:var(--purple-l);color:var(--purple)">Advocacy</span><h3>Why "High-Functioning" is a Harmful Label</h3><p>Labels like "high-functioning" often mask real challenges while dismissing the support people need.</p><div class="blog-meta">March 12, 2025 · 6 min read</div></div></div>
-        <div class="blog-card"><div class="blog-thumb" style="background:linear-gradient(135deg,var(--orange-l),var(--pink-l))">🏫</div><div class="blog-body"><span class="blog-tag" style="background:var(--orange-l);color:var(--orange)">Education</span><h3>5 Ways Teachers Can Support Autistic Students This Year</h3><p>Simple, evidence-based adjustments that transform the classroom for neurodivergent learners.</p><div class="blog-meta">March 5, 2025 · 8 min read</div></div></div>
-        <div class="blog-card"><div class="blog-thumb" style="background:linear-gradient(135deg,var(--blue-l),var(--pink-l))">💬</div><div class="blog-body"><span class="blog-tag" style="background:var(--blue-l);color:var(--blue)">Community</span><h3>Finding My Tribe: An Autistic Adult's Story</h3><p>The life-changing moment of finding a community that understands and celebrates you.</p><div class="blog-meta">Feb 28, 2025 · 5 min read</div></div></div>
-        <div class="blog-card"><div class="blog-thumb" style="background:linear-gradient(135deg,var(--pink-l),var(--orange-l))">❤️</div><div class="blog-body"><span class="blog-tag" style="background:var(--pink-l);color:var(--pink)">Parenting</span><h3>When Your Child Is Diagnosed: The First Steps</h3><p>A compassionate guide for parents navigating the days following an autism diagnosis.</p><div class="blog-meta">Feb 20, 2025 · 10 min read</div></div></div>
-        <div class="blog-card"><div class="blog-thumb" style="background:linear-gradient(135deg,var(--purple-l),var(--orange-l))">🧠</div><div class="blog-body"><span class="blog-tag" style="background:var(--purple-l);color:var(--purple)">Mental Health</span><h3>Autistic Burnout: What It Is and How to Recover</h3><p>Autistic burnout is real, under-recognised, and different from ordinary tiredness.</p><div class="blog-meta">Feb 14, 2025 · 9 min read</div></div></div>
-        <div class="blog-card"><div class="blog-thumb" style="background:linear-gradient(135deg,var(--blue-l),var(--purple-l))">💼</div><div class="blog-body"><span class="blog-tag" style="background:var(--blue-l);color:var(--blue)">Workplace</span><h3>Disclosure at Work: Should You Tell Your Employer?</h3><p>Weighing the pros, cons, and practicalities of disclosing a neurodivergent identity at work.</p><div class="blog-meta">Feb 7, 2025 · 7 min read</div></div></div>
-      </div>
-    </div>
-  </section>
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <div class="footer-logo">HOPE</div>
-        <p class="footer-tagline">Redesigning the systems, not the people. Every voice counts, every mind matters.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Explore</h4>
-        <div class="footer-links">
-          <a href="#" onclick="showPage('home');return false">Home</a>
-          <a href="#" onclick="showPage('about');return false">About</a>
-          <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
-          <a href="#" onclick="showPage('team');return false">Team</a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4>Impact</h4>
-        <div class="footer-links">
-          <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
-          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
+          
           <a href="#" onclick="showPage('storybook');return false">Storybook</a>
           <a href="#" onclick="showPage('events');return false">Events</a>
         </div>
@@ -1131,6 +1006,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         <div class="footer-links">
           <a href="#" onclick="showPage('home');return false">Home</a>
           <a href="#" onclick="showPage('about');return false">About</a>
+          <a href="#" onclick="showPage('message');return false">Message</a>
           <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
           <a href="#" onclick="showPage('team');return false">Team</a>
         </div>
@@ -1139,7 +1015,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         <h4>Impact</h4>
         <div class="footer-links">
           <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
-          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
+          
           <a href="#" onclick="showPage('storybook');return false">Storybook</a>
           <a href="#" onclick="showPage('events');return false">Events</a>
         </div>
@@ -1265,6 +1141,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         <div class="footer-links">
           <a href="#" onclick="showPage('home');return false">Home</a>
           <a href="#" onclick="showPage('about');return false">About</a>
+          <a href="#" onclick="showPage('message');return false">Message</a>
           <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
           <a href="#" onclick="showPage('team');return false">Team</a>
         </div>
@@ -1273,7 +1150,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         <h4>Impact</h4>
         <div class="footer-links">
           <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
-          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
+          
           <a href="#" onclick="showPage('storybook');return false">Storybook</a>
           <a href="#" onclick="showPage('events');return false">Events</a>
         </div>
@@ -1299,6 +1176,15 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
       </div>
 
       <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; margin-top: 4rem;">
+        <!-- Founder & CEO -->
+        <div class="glass-card reveal" style="padding: 3rem; border-top: 6px solid var(--purple); transition: transform 0.5s ease; cursor: default; background: linear-gradient(135deg, var(--bg) 0%, var(--purple-l) 100%);">
+          <div style="width: 80px; height: 80px; background: var(--purple-l); border-radius: 20px; display: grid; place-items: center; font-size: 2.5rem; margin-bottom: 2rem;">👑</div>
+          <h3 style="font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--purple); font-weight: 900; letter-spacing: -0.02em;">Founder & CEO</h3>
+          <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--text);">Toshani Sharma</p>
+          <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; background: linear-gradient(135deg, var(--purple), var(--blue)); color: #fff; padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 900; display: inline-block; box-shadow: 0 4px 12px rgba(123,53,194,0.3);">Visionary Head</span>
+          <p style="font-size: 1rem; color: var(--muted); margin-top: 2rem; line-height: 1.8;">Leading the charge in neuro-advocacy and systemic change. Architect of the global HOPE vision and survivor stories.</p>
+        </div>
+
         <!-- Research & Tech -->
         <div class="glass-card reveal" style="padding: 3rem; border-top: 6px solid var(--purple); transition: transform 0.5s ease; cursor: default;">
           <div style="width: 80px; height: 80px; background: var(--purple-l); border-radius: 20px; display: grid; place-items: center; font-size: 2.5rem; margin-bottom: 2rem;">🔬</div>
@@ -1354,6 +1240,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         <div class="footer-links">
           <a href="#" onclick="showPage('home');return false">Home</a>
           <a href="#" onclick="showPage('about');return false">About</a>
+          <a href="#" onclick="showPage('message');return false">Message</a>
           <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
           <a href="#" onclick="showPage('team');return false">Team</a>
         </div>
@@ -1362,7 +1249,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
         <h4>Impact</h4>
         <div class="footer-links">
           <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
-          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
+          
           <a href="#" onclick="showPage('storybook');return false">Storybook</a>
           <a href="#" onclick="showPage('events');return false">Events</a>
         </div>
@@ -1378,7 +1265,7 @@ footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2
 </div>
 
 <script>
-const pages=['home','about','toolkit','podcast','blog','volunteer','storybook','events','team'];
+const pages=['home', 'about', 'message', 'toolkit', 'volunteer', 'storybook', 'events', 'team'];
 let isDark=false;
 
 function showPage(id){
