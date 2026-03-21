@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOPE — Every Voice Counts, Every Mind Matters</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+<style>
+@font-face {
+  font-family: 'Avallon Alt';
+  src: url('fonts/avallon-alt.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+:root{
+  --purple:#7B35C2;--blue:#3B5FD4;--orange:#D4924A;--pink:#D45870;
+  --purple-l:rgba(123,53,194,0.1);--blue-l:rgba(59,95,212,0.1);
+  --orange-l:rgba(212,146,74,0.12);--pink-l:rgba(212,88,112,0.1);
+  --bg:#FAFAF8;--bg2:#F3F1EE;--surface:#FFFFFF;
+  --text:#1a1622;--muted:#6b6480;--border:rgba(123,53,194,0.15);
+  --shadow:0 2px 20px rgba(0,0,0,0.08);
+  --nav-bg:rgba(255,255,255,0.9);
+}
+[data-theme="dark"]{
+  --bg:#080810;--bg2:#0f0f1a;--surface:rgba(255,255,255,0.04);
+  --text:#f0eeff;--muted:#9490b0;--border:rgba(123,53,194,0.25);
+  --shadow:0 2px 20px rgba(0,0,0,0.3);
+  --nav-bg:rgba(8,8,16,0.9);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;overflow-x:hidden;transition:background 0.3s,color 0.3s;cursor: none;}
+body.loading { overflow: hidden; }
+a, button, input, textarea, select, .btn, .card, .podcast-ep, .event-item, .team-card { cursor: none !important; }
+
+/* LOADING SCREEN */
+.loader-wrapper {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 1s cubic-bezier(0.85, 0, 0.15, 1), visibility 1s;
+}
+.loader-wrapper.loaded {
+  transform: translateY(-100%);
+  visibility: hidden;
+}
+.loader-logo {
+  width: 180px;
+  height: 180px;
+  margin-bottom: 2.5rem;
+  animation: loaderPulse 2.4s infinite ease-in-out;
+}
+.loader-bar {
+  width: 200px;
+  height: 3px;
+  background: var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+.loader-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--purple), var(--pink));
+  transition: width 0.4s ease;
+}
+@keyframes loaderPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px var(--purple-l)); }
+  50% { transform: scale(1.1); filter: drop-shadow(0 0 30px var(--purple-l)); }
+}
+
+/* CURSOR */
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--purple);
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10001; /* Above navbar and loader */
+  transition: transform 0.1s ease;
+}
+.cursor-outline {
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid var(--purple);
+  position: fixed;
+  top: -16px;
+  left: -16px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000; /* Matching loader, but dot is higher */
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+.cursor-hover .cursor-outline {
+  transform: scale(1.8);
+  background: rgba(123, 53, 194, 0.15);
+  border-color: rgba(123, 53, 194, 0.3);
+}
+.cursor-outline::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 1px solid var(--purple);
+  border-radius: 50%;
+  opacity: 0.3;
+  transition: transform 0.6s ease;
+}
+.cursor-hover .cursor-outline::after {
+  transform: scale(1.4);
+  opacity: 0;
+}
+
+/* ANIMATIONS */
+.reveal {
+  opacity: 0;
+  transform: scale(0.96) translateY(40px);
+  filter: blur(25px);
+  transition: opacity 1.8s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 1.8s cubic-bezier(0.16, 1, 0.3, 1), 
+              filter 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity, filter;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  filter: blur(0);
+}
+
+@keyframes cinematicEntrance {
+  0% { opacity: 0; transform: scale(0.92) translateY(60px); filter: blur(40px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+}
+
+@keyframes floatLogo {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.0); filter: drop-shadow(0 8px 32px rgba(123,53,194,0.2)); }
+  50% { transform: translate3d(0, -25px, 0) scale(1.03); filter: drop-shadow(0 30px 60px rgba(123,53,194,0.4)); }
+}
+
+@keyframes slowOrbit {
+  0% { transform: rotate(0deg) translate(20px) rotate(0deg); }
+  100% { transform: rotate(360deg) translate(20px) rotate(-360deg); }
+}
+
+.hero-logo {
+  animation: cinematicEntrance 2s cubic-bezier(0.16, 1, 0.3, 1) forwards, 
+             floatLogo 8s ease-in-out infinite alternate;
+  animation-delay: 0.1s, 2.1s;
+  will-change: transform;
+}
+
+.hero-btns {
+  animation: cinematicEntrance 2.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 1.4s;
+}
+
+/* PARALLAX BLOBS */
+.hero-bg .blob {
+  transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+  will-change: transform;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1200px;
+  z-index: 9999; /* Just below cursor */
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+  padding: 0.3rem 0;
+}
+[data-theme="dark"] nav {
+  background: rgba(8, 8, 16, 0.4);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+nav.scrolled {
+  top: 1rem;
+  width: 85%;
+  border-radius: 24px;
+  background: var(--nav-bg);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border);
+}
+.nav-inner{display:flex;align-items:center;gap:0.5rem;height:64px;padding:0 1.5rem;}
+.logo{display:flex;align-items:center;gap:0.6rem;text-decoration:none;flex-shrink:0;margin-right:auto;}
+.logo img{width:38px;height:38px;object-fit:contain;transition: transform 0.3s;}
+.logo:hover img {transform: rotate(10deg) scale(1.1);}
+.logo-text{font-family:'Avallon Alt',cursive;font-size:1.6rem;font-weight:700;color:var(--text);letter-spacing: 0.05em;}
+.nav-links{display:flex;gap:0.3rem;align-items:center;}
+.nav-links button{background:none;border:none;cursor:pointer;color:var(--muted);font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:0.6rem 0.9rem;border-radius:12px;transition:all 0.3s cubic-bezier(0.16, 1, 0.3, 1);white-space:nowrap;position: relative;}
+.nav-links button::after {content:''; position: absolute; bottom: 0; left: 50%; width: 0; height: 2px; background: var(--purple); transition: all 0.3s; transform: translateX(-50%);}
+.nav-links button:hover{color:var(--text);background:rgba(123,53,194,0.05);}
+.nav-links button:hover::after {width: 40%;}
+.nav-links button.active{color:var(--purple);background:var(--purple-l);}
+.nav-links button.active::after {width: 60%;}
+.theme-btn{background:none;border:1.5px solid var(--border);color:var(--muted);border-radius:12px;padding:0.4rem 0.8rem;cursor:pointer;font-size:1.1rem;margin-left:0.8rem;transition:all 0.3s;flex-shrink:0;display: flex; align-items: center; justify-content: center;}
+.theme-btn:hover{border-color:var(--purple);color:var(--purple);transform: rotate(15deg) scale(1.1);}
+.hamburger{display:none;background:none;border:none;cursor:pointer;color:var(--text);font-size:1.5rem;margin-left:0.5rem;}
+.mobile-menu{display:none;position:fixed;inset:0;background:var(--bg);z-index:900;padding:6rem 2rem 2rem;flex-direction:column;gap:0.5rem;overflow-y:auto;transform: translateY(-100%); transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1);}
+.mobile-menu.open{display:flex; transform: translateY(0);}
+.mobile-menu button{background:none;border:none;cursor:pointer;color:var(--text);font-family:'Nunito',sans-serif;font-size:1.8rem;font-weight:800;padding:1rem;border-radius:15px;text-align:center;transition:all 0.3s;}
+.mobile-menu button:hover{color:var(--purple);background:var(--purple-l);transform: scale(1.05);}
+
+/* PAGES */
+.page{display:none;padding-top:64px;min-height:100vh;}
+.page.active{display:block;}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 2rem;position:relative;overflow:hidden;background:var(--bg);}
+.hero-bg{position:absolute;inset:0;pointer-events:none;z-index:0;}
+.hero-bg .blob{position:absolute;border-radius:50%;filter:blur(110px);opacity:0.25;animation: slowOrbit 25s infinite linear alternate;}
+.hero-bg .b1{width:700px;height:700px;background:var(--purple);top:-150px;left:-100px;}
+.hero-bg .b2{width:600px;height:600px;background:var(--blue);bottom:-150px;right:-100px;animation-delay: -5s;}
+.hero-bg .b3{width:450px;height:450px;background:var(--orange);top:30%;right:-5%;animation-delay: -10s;}
+.hero-bg .b4{width:400px;height:400px;background:var(--pink);bottom:10%;left:-5%;animation-delay: -15s;}
+
+/* GLASS PANEL */
+.hero-glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 40px;
+  padding: 6rem 4rem;
+  max-width: 1100px;
+  width: 95%;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+[data-theme="dark"] .hero-glass {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.hero-logo{display:none;}
+
+.hero h1{
+  font-family:'Avallon Alt',cursive;
+  font-size:clamp(3.5rem, 10vw, 10rem);
+  font-weight:700;
+  line-height:1.2;
+  margin-bottom:1.5rem;
+  letter-spacing:-0.01em;
+  background:linear-gradient(135deg,var(--purple) 0%,var(--blue) 40%,var(--pink) 70%,var(--orange) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter: drop-shadow(0 15px 30px rgba(123,53,194,0.15));
+  padding: 0.2em 0.1em;
+  animation: cinematicEntrance 2s cubic-bezier(0.16, 1, 0.3, 1) forwards, 
+             floatLogo 8s ease-in-out infinite alternate;
+  animation-delay: 0.1s, 2.1s;
+}
+.hero-tagline{font-family:'Nunito',sans-serif;font-size:clamp(1.2rem, 2.8vw, 1.7rem);font-weight: 700;color:var(--text);max-width:850px;line-height:1.5;margin-bottom:3rem;opacity:0.9;letter-spacing: -0.01em;text-wrap: balance;}
+.hero-btns{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;}
+
+/* PARTICLES */
+#particles-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 0%, var(--bg) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+.btn{display:inline-flex;align-items:center;gap:0.7rem;padding:1rem 2.2rem;border-radius:100px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;border:none;transition:all 0.4s cubic-bezier(0.16, 1, 0.3, 1);text-decoration:none;letter-spacing:0.02em;}
+.btn-primary{background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;box-shadow:0 10px 30px rgba(123,53,194,0.3);}
+.btn-primary:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 15px 45px rgba(123,53,194,0.5);}
+.btn-outline{background:var(--bg);color:var(--purple);border:2px solid var(--purple);backdrop-filter:blur(10px);}
+.btn-outline:hover{background:var(--purple);color:#fff;transform:translateY(-5px) scale(1.02);}
+
+/* SECTIONS */
+.section{padding:8rem 2rem;position:relative;}
+.section:nth-child(even) { background: var(--bg2); }
+.container{max-width:1200px;margin:0 auto;}
+.section-header { text-align: center; margin-bottom: 5rem; }
+.section-tag{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.75rem;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;background:var(--purple-l);color:var(--purple);border:1px solid rgba(123,53,194,0.25);padding:0.4rem 1.2rem;border-radius:100px;margin-bottom:1.5rem;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2.5rem, 5vw, 3.8rem);line-height:1.1;margin-bottom:1.5rem;font-weight:700;}
+.section-title em{font-style:italic;color:var(--purple);display: block;}
+.section-body{color:var(--muted);line-height:1.9;max-width:750px;font-size:1.1rem;margin: 0 auto;}
+.rainbow-bar{height:4px;border-radius:100px;background:linear-gradient(90deg,var(--purple),var(--blue),var(--orange),var(--pink));margin:2rem auto;max-width:120px;}
+
+/* GLASS CARDS */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.1);
+}
+[data-theme="dark"] .glass-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* CARDS */
+.card-grid{display:grid;gap:2rem;margin-top:4rem;}
+.card-grid-2{grid-template-columns:repeat(auto-fit,minmax(350px,1fr));}
+.card-grid-3{grid-template-columns:repeat(auto-fit,minmax(300px,1fr));}
+.card{border-radius:24px;padding:3rem;transition:all 0.5s cubic-bezier(0.16, 1, 0.3, 1);}
+.card:hover{transform:translateY(-12px);box-shadow:0 30px 60px rgba(123,53,194,0.15);border-color:var(--purple);}
+.card-icon{font-size:2.8rem;margin-bottom:1.5rem;display:inline-block;padding:1rem;background:var(--bg);border-radius:18px;}
+.card h3{font-size:1.4rem;font-weight:800;margin-bottom:1rem;font-family:'Playfair Display', serif;}
+.card p{font-size:1rem;color:var(--muted);line-height:1.8;}
+
+/* STATS */
+.stats{display:flex;flex-wrap:wrap;gap:3rem;margin-top:4rem;justify-content: center;}
+.stat{text-align:center;padding:1.5rem;}
+.stat-num{font-family:'Avallon Alt',cursive;font-size:4.5rem;font-weight:700;background:linear-gradient(135deg,var(--purple),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom: 0.5rem;}
+.stat-label{font-size:1rem;color:var(--muted);font-weight:700;letter-spacing: 0.05em;}
+
+/* HERO STATS STRIP */
+.stats-strip{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:4rem 2rem;background: var(--bg);}
+
+/* ── FOUNDER SECTION ── */
+.founder-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 4rem;
+  align-items: center;
+  margin-top: 4rem;
+}
+.founder-image-wrapper {
+  position: relative;
+  border-radius: 30px;
+  overflow: hidden;
+  aspect-ratio: 4/5;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+}
+.founder-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.founder-image-wrapper:hover img {
+  transform: scale(1.05);
+}
+.founder-image-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(123,53,194,0.4), transparent);
+}
+.founder-text-content {
+  text-align: left;
+}
+.founder-quote-large {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  line-height: 1.4;
+  margin-bottom: 2rem;
+  color: var(--text);
+  font-style: italic;
+  position: relative;
+}
+.founder-quote-large::before {
+  content: '“';
+  position: absolute;
+  left: -40px;
+  top: -20px;
+  font-size: 5rem;
+  color: var(--purple);
+  opacity: 0.3;
+}
+.founder-message-p {
+  margin-bottom: 1.2rem;
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+@media(max-width: 960px) {
+  .founder-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .founder-image-wrapper {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+/* ABOUT ANIMATED SECTIONS */
+.about-section{opacity:0;transform:translateY(30px);transition:opacity 0.6s,transform 0.6s;}
+.about-section.visible{opacity:1;transform:translateY(0);}
+.about-timeline{position:relative;padding-left:3rem;margin-top:2rem;}
+.about-timeline::before{content:'';position:absolute;left:14px;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--purple),var(--orange),var(--pink));border-radius:4px;}
+.timeline-item{position:relative;margin-bottom:2.5rem;}
+.timeline-dot{position:absolute;left:-2.4rem;top:6px;width:18px;height:18px;border-radius:50%;border:3px solid var(--bg);box-shadow:0 0 0 3px var(--purple);}
+.timeline-item:nth-child(2) .timeline-dot{box-shadow:0 0 0 3px var(--blue);}
+.timeline-item:nth-child(3) .timeline-dot{box-shadow:0 0 0 3px var(--orange);}
+.timeline-item:nth-child(4) .timeline-dot{box-shadow:0 0 0 3px var(--pink);}
+.timeline-item h3{font-size:1.1rem;font-weight:800;margin-bottom:0.5rem;}
+.timeline-item p{color:var(--muted);line-height:1.8;font-size:0.95rem;}
+
+/* SOLUTION PILLARS */
+.pillar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-top:2rem;}
+.pillar{background:var(--surface);border-radius:16px;padding:1.8rem;border:1.5px solid var(--border);position:relative;overflow:hidden;}
+.pillar::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
+.pillar:nth-child(1)::before{background:var(--purple);}
+.pillar:nth-child(2)::before{background:var(--blue);}
+.pillar:nth-child(3)::before{background:var(--orange);}
+.pillar-icon{font-size:1.8rem;margin-bottom:0.8rem;}
+.pillar h3{font-size:1rem;font-weight:800;margin-bottom:0.5rem;}
+.pillar p{font-size:0.88rem;color:var(--muted);line-height:1.75;}
+
+/* FOUNDER QUOTE */
+.founder-card{background:linear-gradient(135deg,rgba(123,53,194,0.06),rgba(59,95,212,0.06));border:1.5px solid var(--border);border-radius:24px;padding:3rem;position:relative;overflow:hidden;}
+.founder-card::before{content:'"';font-family:'Playfair Display',serif;font-size:10rem;color:var(--purple);opacity:0.08;position:absolute;top:-20px;left:20px;line-height:1;}
+.founder-quote{font-family:'Playfair Display',serif;font-size:clamp(1rem,2vw,1.2rem);font-style:italic;line-height:1.75;color:var(--text);margin-bottom:1.5rem;position:relative;}
+.founder-sig{display:flex;align-items:center;gap:1rem;}
+.founder-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-family:'Avallon Alt',cursive;font-size:1.4rem;font-weight:700;color:#fff;flex-shrink:0;}
+.founder-info strong{display:block;font-weight:800;font-size:1rem;}
+.founder-info span{font-size:0.85rem;color:var(--muted);}
+
+/* TOOLKIT */
+.toolkit-tabs{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2rem;}
+.tab-btn{background:var(--surface);border:1.5px solid var(--border);color:var(--muted);border-radius:50px;padding:0.5rem 1.2rem;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.2s;}
+.tab-btn.active{background:var(--purple);color:#fff;border-color:var(--purple);}
+.toolkit-panel{display:none;}
+.toolkit-panel.active{display:block;animation:fadeIn 0.3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.resource-item{display:flex;gap:1.2rem;align-items:center;padding:1.2rem;border-radius:14px;background:var(--surface);border:1.5px solid var(--border);margin-bottom:0.8rem;transition:border-color 0.2s,transform 0.2s;box-shadow:var(--shadow);}
+.resource-item:hover{border-color:var(--purple);transform:translateX(4px);}
+.resource-icon{font-size:1.6rem;flex-shrink:0;}
+.resource-info h4{font-size:0.95rem;font-weight:800;margin-bottom:0.25rem;}
+.resource-info p{font-size:0.82rem;color:var(--muted);}
+.dl-btn{margin-left:auto;flex-shrink:0;background:var(--purple-l);color:var(--purple);border:1.5px solid rgba(123,53,194,0.25);border-radius:8px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:background 0.2s;}
+.dl-btn:hover{background:rgba(123,53,194,0.2);}
+
+/* PODCAST */
+.podcast-ep{display:flex;align-items:center;gap:1.5rem;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:0.9rem;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:var(--shadow);cursor:pointer;}
+.podcast-ep:hover{border-color:var(--blue);box-shadow:0 6px 20px rgba(59,95,212,0.1);}
+.ep-num{width:52px;height:52px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-family:'Avallon Alt',cursive;font-size:1.1rem;font-weight:700;color:#fff;}
+.ep-info{flex:1;}
+.ep-info h3{font-size:0.98rem;font-weight:800;margin-bottom:0.25rem;}
+.ep-info p{font-size:0.82rem;color:var(--muted);}
+.ep-duration{font-size:0.78rem;color:var(--muted);flex-shrink:0;}
+.play-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));border:none;cursor:pointer;color:#fff;font-size:0.95rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:transform 0.2s;box-shadow:0 4px 12px rgba(123,53,194,0.3);}
+.play-btn:hover{transform:scale(1.12);}
+
+/* BLOG */
+.blog-card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;transition:transform 0.25s,box-shadow 0.25s;box-shadow:var(--shadow);}
+.blog-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.1);}
+.blog-thumb{height:140px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;}
+.blog-body{padding:1.4rem;}
+.blog-tag{font-size:0.7rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.7rem;border-radius:50px;margin-bottom:0.8rem;display:inline-block;}
+.blog-body h3{font-size:0.98rem;font-weight:800;margin-bottom:0.5rem;line-height:1.4;}
+.blog-body p{font-size:0.85rem;color:var(--muted);line-height:1.65;}
+.blog-meta{font-size:0.75rem;color:var(--muted);margin-top:0.9rem;font-weight:600;}
+
+/* FORMS */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.form-group{display:flex;flex-direction:column;gap:0.45rem;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:0.82rem;font-weight:700;color:var(--muted);}
+input,textarea,select{background:var(--surface);border:1.5px solid var(--border);color:var(--text);border-radius:10px;padding:0.75rem 1rem;font-family:'Nunito',sans-serif;font-size:0.9rem;transition:border-color 0.2s;width:100%;}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--purple);}
+textarea{resize:vertical;min-height:120px;}
+select option{background:var(--bg);}
+.form-submit{margin-top:1.5rem;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border:none;padding:1rem 2.5rem;border-radius:50px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:transform 0.2s,box-shadow 0.2s;}
+.form-submit:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(123,53,194,0.4);}
+
+/* EVENTS */
+.event-item{display:flex;gap:1.5rem;align-items:flex-start;background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.2rem;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:var(--shadow);}
+.event-item:hover{border-color:var(--orange);box-shadow:0 6px 20px rgba(212,146,74,0.1);}
+.event-date{flex-shrink:0;width:62px;text-align:center;border-radius:12px;padding:0.7rem 0.5rem;background:linear-gradient(135deg,var(--orange),var(--pink));color:#fff;}
+.event-date .day{font-family:'Avallon Alt',cursive;font-size:2rem;font-weight:700;line-height:1;}
+.event-date .mon{font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;}
+.event-info h3{font-size:1rem;font-weight:800;margin-bottom:0.4rem;}
+.event-info p{font-size:0.85rem;color:var(--muted);line-height:1.65;}
+.event-tag{display:inline-block;font-size:0.7rem;font-weight:800;padding:0.2rem 0.6rem;border-radius:50px;margin-bottom:0.5rem;background:var(--orange-l);color:var(--orange);border:1.5px solid rgba(212,146,74,0.25);}
+
+/* STORYBOOK */
+.book-cover{background:linear-gradient(135deg,var(--purple),var(--blue) 50%,var(--pink));border-radius:24px;padding:3rem 2rem;text-align:center;max-width:380px;margin:0 auto 3rem;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(123,53,194,0.3);}
+.book-cover::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,rgba(255,255,255,0.15) 0%,transparent 60%);}
+.book-emoji{font-size:4.5rem;margin-bottom:1rem;position:relative;z-index:1;}
+.book-title{font-family:'Avallon Alt',cursive;font-size:2.2rem;font-weight:700;color:#fff;position:relative;z-index:1;}
+.book-subtitle{font-size:0.95rem;color:rgba(255,255,255,0.85);margin-top:0.5rem;position:relative;z-index:1;}
+.chapter-list{list-style:none;}
+.chapter-list li{display:flex;align-items:center;gap:1rem;padding:1.2rem;border-radius:14px;margin-bottom:0.8rem;background:var(--surface);border:1.5px solid var(--border);transition:border-color 0.2s,transform 0.2s;cursor:pointer;box-shadow:var(--shadow);}
+.chapter-list li:hover{border-color:var(--purple);transform:translateX(6px);}
+.ch-num{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Avallon Alt',cursive;font-size:1.1rem;font-weight:700;color:#fff;}
+.ch-info h4{font-size:0.95rem;font-weight:800;}
+.ch-info p{font-size:0.82rem;color:var(--muted);}
+
+/* TEAM */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-top:2.5rem;}
+.team-card{text-align:center;padding:2rem 1.5rem;background:var(--surface);border:1.5px solid var(--border);border-radius:18px;box-shadow:var(--shadow);transition:transform 0.25s,box-shadow 0.25s;}
+.team-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(123,53,194,0.1);}
+.avatar{width:72px;height:72px;border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-family:'Avallon Alt',cursive;font-size:1.6rem;font-weight:700;color:#fff;}
+.team-card h3{font-size:1rem;font-weight:800;margin-bottom:0.3rem;}
+.team-card p{font-size:0.82rem;color:var(--muted);}
+
+/* HERO STATS STRIP */
+.stats-strip{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:2.5rem 2rem;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:6rem 2rem;background:var(--bg2);position:relative;overflow:hidden;}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:4rem;}
+.footer-brand{display:flex;flex-direction:column;gap:1.5rem;}
+.footer-logo{font-family:'Avallon Alt',cursive;font-size:2.5rem;font-weight:700;color:var(--text);letter-spacing:0.05em;}
+.footer-tagline{color:var(--muted);font-size:1rem;line-height:1.6;max-width:300px;}
+.footer-col h4{font-size:0.8rem;font-weight:800;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:2rem;color:var(--text);}
+.footer-links{display:flex;flex-direction:column;gap:1rem;margin-top:0;}
+.footer-links a{color:var(--muted);font-size:0.95rem;text-decoration:none;font-weight:600;transition:all 0.3s cubic-bezier(0.16, 1, 0.3, 1);width:fit-content;}
+.footer-links a:hover{color:var(--purple);transform:translateX(8px);}
+.footer-bottom{max-width:1200px;margin:4rem auto 0;padding-top:2rem;border-top:1px solid rgba(123,53,194,0.1);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:0.85rem;}
+
+@media(max-width:960px){
+  .footer-inner{grid-template-columns:1fr 1fr;gap:3rem;}
+  .footer-brand{grid-column:1/-1;text-align:center;align-items:center;}
+  .footer-tagline{max-width:100%;}
+}
+@media(max-width:640px){
+  .footer-inner{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;gap:1.5rem;text-align:center;}
+}
+
+/* ALERT */
+.success-toast{position:fixed;bottom:2rem;right:2rem;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;padding:1rem 1.5rem;border-radius:12px;font-weight:700;z-index:999;transform:translateY(100px);opacity:0;transition:all 0.3s;}
+.success-toast.show{transform:translateY(0);opacity:1;}
+
+@media(max-width:960px){.nav-links{display:none;}.hamburger{display:block;}}
+@media(max-width:640px){.form-grid{grid-template-columns:1fr;}.form-group.full{grid-column:1;}.event-item{flex-direction:column;}.podcast-ep{flex-wrap:wrap;}.hero-logo{width:160px;height:160px;}}
+</style>
+</head>
+<body class="loading">
+<div class="loader-wrapper" id="loader">
+  <div class="loader-logo"><img src="images/Logo.svg" alt="HOPE Logo" style="width:100%;height:100%;object-fit:contain;"></div>
+  <div class="loader-bar"><div class="loader-progress" id="loader-progress"></div></div>
+</div>
+<div id="cursor-dot" class="cursor-dot"></div>
+<div id="cursor-outline" class="cursor-outline"></div>
+<div class="success-toast" id="toast">✓ Form submitted! We'll be in touch soon 💜</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#" onclick="showPage('home');return false;">
+      <img style="background:transparent;" src="images/Logo.svg" alt="HOPE Logo">
+      <span class="logo-text">HOPE</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <button onclick="showPage('home')" class="active" id="nav-home">Home</button>
+      <button onclick="showPage('about')" id="nav-about">About</button>
+      <button onclick="showPage('toolkit')" id="nav-toolkit">Toolkit</button>
+      <button onclick="showPage('podcast')" id="nav-podcast">Podcast</button>
+      <button onclick="showPage('blog')" id="nav-blog">Blog</button>
+      <button onclick="showPage('volunteer')" id="nav-volunteer">Volunteer</button>
+      <button onclick="showPage('storybook')" id="nav-storybook">Storybook</button>
+      <button onclick="showPage('events')" id="nav-events">Events</button>
+      <button onclick="showPage('team')" id="nav-team">Team</button>
+    </div>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    <button class="hamburger" onclick="toggleMenu()" id="ham">☰</button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button onclick="showPage('home');toggleMenu()">Home</button>
+  <button onclick="showPage('about');toggleMenu()">About Us</button>
+  <button onclick="showPage('toolkit');toggleMenu()">Inclusion Toolkit</button>
+  <button onclick="showPage('podcast');toggleMenu()">Podcast</button>
+  <button onclick="showPage('blog');toggleMenu()">Blog</button>
+  <button onclick="showPage('volunteer');toggleMenu()">Volunteer Sign-Up</button>
+  <button onclick="showPage('storybook');toggleMenu()">Storybook</button>
+  <button onclick="showPage('events');toggleMenu()">Events</button>
+  <button onclick="showPage('team');toggleMenu()">Meet Our Team</button>
+</div>
+
+<!-- ══ HOME ══ -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="blob b1"></div><div class="blob b2"></div>
+      <div class="blob b3"></div><div class="blob b4"></div>
+    </div>
+    <canvas id="particles-canvas"></canvas>
+    <div class="hero-overlay"></div>
+    
+    <div class="hero-glass reveal">
+      <div class="hero-content">
+        <h1>Redesigning Systems, Not People.</h1>
+        <p class="hero-tagline">“Every Voice Counts. Every Mind Matters — Celebrating Neurological Conditions In Our Community”</p>
+        <div class="hero-btns">
+          <button class="btn btn-primary" onclick="showPage('volunteer')"><span>Get Certified</span> <i style="font-style: normal; font-weight: 400; font-size: 1.2rem;">→</i></button>
+          <button class="btn btn-outline" onclick="showPage('about')">Our Mission</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-strip reveal">
+    <div class="container">
+      <div class="stats">
+        <div class="stat"><div class="stat-num" data-target="10" data-suffix="+">0</div><div class="stat-label">In Podcasts</div></div>
+        <div class="stat"><div class="stat-num" data-target="10" data-suffix="k+">0</div><div class="stat-label">Reached Worldwide</div></div>
+        <div class="stat"><div class="stat-num" data-target="4" data-suffix="+">0</div><div class="stat-label">Countries</div></div>
+        <div class="stat"><div class="stat-num" data-target="1" data-suffix="">0</div><div class="stat-label">Unified Blueprint</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Our Strategy</span>
+        <h2 class="section-title">Architecting the <em>solution</em></h2>
+        <div class="rainbow-bar"></div>
+        <p class="section-body">We are the blueprint for a society that integrates the full spectrum of human neurological diversity. We move past awareness to create systemic impact.</p>
+      </div>
+      <div class="card-grid card-grid-3">
+        <div class="glass-card card"><div class="card-icon">🏛️</div><h3>National Advocacy</h3><p>Official members of the National Network of Autism and the Autism Alliance of Canada, driving policy at the highest levels.</p></div>
+        <div class="glass-card card"><div class="card-icon">🎯</div><h3>Leadership</h3><p>Advisory member and lead organizer for CALS 2026, Canada's largest leadership summit, shaping inclusive governance.</p></div>
+        <div class="glass-card card"><div class="card-icon">🔬</div><h3>Research</h3><p>Collaborating with university professors to transform complex research into accessible, high-impact survival guides.</p></div>
+        <div class="glass-card card"><div class="card-icon">🧰</div><h3>Toolkit</h3><p>Become a certified advocate through our global Inclusion Toolkit and level up your resume for college.</p></div>
+        <div class="glass-card card"><div class="card-icon">📖</div><h3>Storybook</h3><p>"Autism: Life Off Script" — Lily's diary reveals the unfiltered truth of sensory overwhelm and stigma.</p></div>
+        <div class="glass-card card"><div class="card-icon">🤝</div><h3>Volunteering</h3><p>Choose your squad — from Research to Social Media — and join the revolution. We care about your drive, not your resume.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" style="background:var(--bg2);border-top:1px solid var(--border)">
+    <div class="container" style="text-align:center">
+      <span class="section-tag">National Memberships</span>
+      <h2 class="section-title" style="max-width:600px;margin:0 auto 1.5rem">Influencing policy at <em>the highest levels</em></h2>
+      <p class="section-body" style="margin:0 auto 2.5rem">Official member of the National Network of Autism and the Autism Alliance of Canada — and advisory organizer of CALS 2026, Canada's largest leadership summit.</p>
+      <button class="btn btn-primary" onclick="showPage('about')"><span>More About Us</span> <i style="font-style: normal; font-weight: 400; font-size: 1.2rem;">→</i></button>
+    </div>
+  </section>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">HOPE</div>
+        <p class="footer-tagline">Redesigning the systems, not the people. Every voice counts, every mind matters.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('home');return false">Home</a>
+          <a href="#" onclick="showPage('about');return false">About</a>
+          <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
+          <a href="#" onclick="showPage('team');return false">Team</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Impact</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
+          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
+          <a href="#" onclick="showPage('storybook');return false">Storybook</a>
+          <a href="#" onclick="showPage('events');return false">Events</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 HOPE — Youth-Led Advocacy</p>
+      <div style="display:flex;gap:1.5rem">
+        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" style="color:inherit;text-decoration:none">Back to Top ↑</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══ ABOUT ══ -->
+<div id="page-about" class="page">
+  <section class="section" style="padding-bottom: 2rem;">
+    <div class="container" style="text-align: center;">
+      <span class="section-tag" style="margin-bottom: 1rem;">Our Mission</span>
+      <h1 class="section-title">Redesigning <em>the systems</em> — not the people.</h1>
+      <p class="section-body" style="margin-bottom: 5rem;">HOPE was founded to challenge the status quo. We believe it is time to move past passive "awareness" and toward active, systemic change. As a youth-led initiative, we bridge the gap between high-level academic research and real-world accessibility.</p>
+
+      <div class="rainbow-bar"></div>
+
+      <!-- ANIMATED SECTION 1: Global Challenge -->
+      <div class="about-section" id="as-challenge" style="margin-top: 6rem; text-align: left;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+          <div class="glass-card reveal" style="padding: 3rem;">
+            <span class="section-tag">The Global Challenge</span>
+            <h2 class="section-title" style="font-size: 2.2rem; margin-top: 1rem;">Beyond <em>Stigma</em></h2>
+            <p class="section-body" style="text-align: left; margin: 1.5rem 0;">Neurological conditions—including Autism, Epilepsy, ADHD, and Dementia—affect hundreds of millions of people worldwide, yet they remain among the most misunderstood and stigmatized realities of our time.</p>
+            <p class="section-body" style="text-align: left; margin-top: 1rem;">In many societies, a diagnosis is treated as a limitation rather than a different way of processing the world. This stigma leads to systemic exclusion in education, healthcare, and the workforce, leaving brilliant minds sidelined by a world that refuses to adapt.</p>
+          </div>
+          <div class="reveal">
+            <div style="font-size: 8rem; opacity: 0.15; position: absolute; top: -20px; right: 0;">🌐</div>
+            <div class="pillar-grid" style="grid-template-columns: 1fr; gap: 1.5rem;">
+              <div class="pillar" style="background: rgba(123,53,194,0.05); border-color: var(--purple-l);">
+                <div class="pillar-icon">🌎</div>
+                <h3>Systemic Impact</h3>
+                <p>Hundreds of millions affected globally by outdated social barriers.</p>
+              </div>
+              <div class="pillar" style="background: rgba(59,95,212,0.05); border-color: var(--blue-l);">
+                <div class="pillar-icon">🧠</div>
+                <h3>Active Redesign</h3>
+                <p>Moving from "awareness" to redesigning the world for all brain types.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANIMATED SECTION 2: Solving the Problem -->
+      <div class="about-section" id="as-solution" style="margin-top: 8rem; text-align: center;">
+        <span class="section-tag">Solving the Problem</span>
+        <h2 class="section-title">Architecting <em>the solution.</em></h2>
+        <div class="pillar-grid" style="margin-top: 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          <div class="pillar reveal glass-card" style="padding: 3rem; border-top: 5px solid var(--purple); animation-delay: 0.1s;">
+            <div class="pillar-icon" style="background: var(--purple-l); color: var(--purple); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 15px; margin: 0 auto 1.5rem;">🏛️</div>
+            <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1rem;">National Advocacy</h3>
+            <p style="color: var(--muted); line-height: 1.7;">Official memberships in the National Network of Autism and the Autism Alliance of Canada to influence policy at the highest levels.</p>
+          </div>
+          <div class="pillar reveal glass-card" style="padding: 3rem; border-top: 5px solid var(--blue); animation-delay: 0.2s;">
+            <div class="pillar-icon" style="background: var(--blue-l); color: var(--blue); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 15px; margin: 0 auto 1.5rem;">🎯</div>
+            <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1rem;">Leadership & Governance</h3>
+            <p style="color: var(--muted); line-height: 1.7;">Serving as an advisory member and organizer for CALS 2026, ensuring neuro-inclusion is a national priority.</p>
+          </div>
+          <div class="pillar reveal glass-card" style="padding: 3rem; border-top: 5px solid var(--orange); animation-delay: 0.3s;">
+            <div class="pillar-icon" style="background: var(--orange-l); color: var(--orange); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 15px; margin: 0 auto 1.5rem;">🔬</div>
+            <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1rem;">Academic Collaboration</h3>
+            <p style="color: var(--muted); line-height: 1.7;">Collaborating with professors from "renowned institutions" to bridge elite research and real-world survival guides.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANIMATED SECTION 3: The Vision -->
+      <div class="about-section reveal" id="as-vision" style="margin-top: 8rem; background: var(--purple-l); border-radius: 40px; padding: 5rem 3rem; border: 1.5px solid var(--border);">
+        <span class="section-tag">The Vision</span>
+        <h2 class="section-title" style="margin: 1.5rem auto; max-width: 800px;">The time to make a difference <em>is now.</em></h2>
+        <p class="section-body" style="max-width: 700px; margin: 0 auto; color: var(--text);">HOPE is the blueprint for a society that finally recognizes and integrates the full spectrum of human neurological diversity. We are redesigning the systems—not the people.</p>
+        <div class="stats" style="margin-top: 4rem;">
+          <div class="stat"><div class="stat-num" data-val="100">0</div><div class="stat-label">Youth-Led Initiative</div></div>
+          <div class="stat"><div class="stat-num" data-val="2026">0</div><div class="stat-label">CALS 2026 Ready</div></div>
+          <div class="stat"><div class="stat-num" data-val="4">0</div><div class="stat-label">CORE CORE PILLARS</div></div>
+        </div>
+      </div>
+
+      <!-- ANIMATED SECTION 4: Founder's Message -->
+      <div class="about-section reveal" id="as-founder" style="margin-top: 8rem; margin-bottom: 4rem;">
+        <div class="founder-layout">
+          <div class="founder-image-wrapper">
+            <img src="images/Founder.jpg" alt="Toshani Sharma">
+          </div>
+          <div class="founder-text-content">
+            <span class="section-tag">A Message from Our Founder</span>
+            <div class="founder-quote-large">"The world wasn't built for every brain—but together, we can redesign it."</div>
+            <p class="founder-message-p">I started HOPE because I was tired of seeing brilliant minds silenced by a single word: stigma. Whether it is Autism, ADHD, Epilepsy, or Dementia, we live in a society that often fears what it doesn't understand.</p>
+            <p class="founder-message-p">We’ve spent years talking about "awareness," but awareness hasn't fixed the systems that sideline neurodivergent people. It hasn't stopped the isolation, and it hasn't opened the doors that remain locked for so many in our community.</p>
+            <p class="founder-message-p">HOPE is a youth-led refusal to accept that status quo. We aren't here to "fix" people; we are here to fix a broken world. This isn't just a project for me—it’s a mission to ensure that no one ever has to feel like their neurological identity is a deficit.</p>
+            <p class="founder-message-p" style="font-weight: 700;">Toshani Sharma <br><span style="font-weight: 400; opacity: 0.7;">Founder, HOPE</span></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">HOPE</div>
+        <p class="footer-tagline">Redesigning the systems, not the people. Every voice counts, every mind matters.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('home');return false">Home</a>
+          <a href="#" onclick="showPage('about');return false">About</a>
+          <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
+          <a href="#" onclick="showPage('team');return false">Team</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Impact</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
+          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
+          <a href="#" onclick="showPage('storybook');return false">Storybook</a>
+          <a href="#" onclick="showPage('events');return false">Events</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 HOPE — Youth-Led Advocacy</p>
+      <div style="display:flex;gap:1.5rem">
+        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" style="color:inherit;text-decoration:none">Back to Top ↑</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══ TOOLKIT ══ -->
+<div id="page-toolkit" class="page">
+  <section class="section">
+    <div class="container" style="text-align: center;">
+      <span class="section-tag" style="margin-bottom: 2rem;">The HOPE Inclusion Toolkit</span>
+      <h1 class="section-title">Lead the <em>change</em>.</h1>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 5rem; text-align: left;">
+        <div class="reveal">
+          <h2 class="section-title" style="font-size: 2.2rem; margin-bottom: 2rem;">Ready to build a world where <em>every mind belongs?</em></h2>
+          <p class="section-body" style="text-align: left; margin-bottom: 2rem; font-size: 1.1rem; line-height: 1.8;">The HOPE Inclusion Toolkit is more than just a resource—it’s a global movement. We believe that youth shouldn't just wait for the future; we should be the ones designing it.</p>
+          <p class="section-body" style="text-align: left; margin-bottom: 3rem; font-size: 1.1rem; line-height: 1.8;">This is your chance to gain elite-level skills, break the stigma surrounding neurological conditions, and earn a certification that proves you are a leader in social impact.</p>
+          
+          <a href="https://www.canva.com/design/DAG5iw06h0Q/TgrDLHWRXzF9NgmTj4BB6w/edit" target="_blank" class="btn btn-primary" style="padding: 1.25rem 3.5rem; font-size: 1.15rem; letter-spacing: 0.12em; box-shadow: 0 20px 40px rgba(123,53,194,0.3);">START YOUR CERTIFICATION NOW</a>
+        </div>
+
+        <div class="glass-card reveal" style="padding: 3.5rem; border-color: var(--purple); border-width: 2px; border-radius: 40px; background: rgba(123,53,194,0.03);">
+          <h3 style="margin-bottom: 2.5rem; color: var(--purple); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em;">Why Join the Movement?</h3>
+          <div class="pillar-grid" style="grid-template-columns: 1fr; gap: 2.5rem;">
+            <div class="reveal" style="display: flex; gap: 1.5rem; align-items: flex-start;">
+              <div style="font-size: 2rem; background: var(--purple-l); padding: 1rem; border-radius: 20px;">📊</div>
+              <div><h4 style="font-weight: 800; margin-bottom: 0.5rem; font-size: 1.1rem;">Master the Facts</h4><p style="font-size: 0.95rem; color: var(--muted); line-height: 1.6;">Dive into the world of conditions like Autism, ADHD, Epilepsy, and Dementia to replace labels with real understanding.</p></div>
+            </div>
+            <div class="reveal" style="display: flex; gap: 1.5rem; align-items: flex-start;">
+              <div style="font-size: 2rem; background: var(--blue-l); padding: 1rem; border-radius: 20px;">📈</div>
+              <div><h4 style="font-weight: 800; margin-bottom: 0.5rem; font-size: 1.1rem;">Level Up Your Portfolio</h4><p style="font-size: 0.95rem; color: var(--muted); line-height: 1.6;">Earn an official certification to supercharge your college applications and student resume.</p></div>
+            </div>
+            <div class="reveal" style="display: flex; gap: 1.5rem; align-items: flex-start;">
+              <div style="font-size: 2rem; background: var(--pink-l); padding: 1rem; border-radius: 20px;">🕊️</div>
+              <div><h4 style="font-weight: 800; margin-bottom: 0.5rem; font-size: 1.1rem;">100% Free & Impactful</h4><p style="font-size: 0.95rem; color: var(--muted); line-height: 1.6;">High-level training designed by youth, for youth, with zero barriers to entry.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" style="margin-top: 8rem; padding: 4rem; background: var(--bg2); border-radius: 30px; text-align: center;">
+        <h2 class="section-title" style="font-size: 2.5rem;">What's Your <em>Impact?</em></h2>
+        <p class="section-body" style="max-width: 800px; margin: 2rem auto;">By completing this toolkit, you aren't just learning—you’re doing. You’re building empathy-driven classrooms and proving that the next generation of leaders cares about true accessibility. Whether you want to be a doctor, a lawyer, or an entrepreneur, understanding neurobiological diversity is your secret weapon for the modern world.</p>
+        <h3 class="section-title" style="font-size: 1.8rem; margin-top: 3rem;">Don’t Just Watch the Future—<em>Create It.</em></h3>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">HOPE</div>
+        <p class="footer-tagline">Redesigning the systems, not the people. Every voice counts, every mind matters.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('home');return false">Home</a>
+          <a href="#" onclick="showPage('about');return false">About</a>
+          <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
+          <a href="#" onclick="showPage('team');return false">Team</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Impact</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
+          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
+          <a href="#" onclick="showPage('storybook');return false">Storybook</a>
+          <a href="#" onclick="showPage('events');return false">Events</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 HOPE — Youth-Led Advocacy</p>
+      <div style="display:flex;gap:1.5rem">
+        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" style="color:inherit;text-decoration:none">Back to Top ↑</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══ PODCAST ══ -->
+<div id="page-podcast" class="page">
+  <section class="section">
+    <div class="container">
+      <span class="section-tag">Listen & Learn</span>
+      <h1 class="section-title">The HOPE <em>Podcast</em></h1>
+      <p class="section-body">Real conversations about neurodiversity, inclusion, parenting, advocacy, and living authentically. New episodes every week.</p>
+      <div class="rainbow-bar"></div>
+      <div style="margin:2.5rem 0">
+        <div class="podcast-ep"><div class="ep-num">EP 42</div><div class="ep-info"><h3>Unmasking at Work: Finding Your Authentic Self</h3><p>Dr. Sarah Chen on the psychological cost of masking and authentic self-expression in professional settings.</p></div><div class="ep-duration">48 min</div><button class="play-btn">▶</button></div>
+        <div class="podcast-ep"><div class="ep-num">EP 41</div><div class="ep-info"><h3>Late Diagnosis: The Gift and Grief of Knowing</h3><p>Three adults share their stories of receiving an autism or ADHD diagnosis after age 30.</p></div><div class="ep-duration">62 min</div><button class="play-btn">▶</button></div>
+        <div class="podcast-ep"><div class="ep-num">EP 40</div><div class="ep-info"><h3>Building Inclusive Schools: A Principal's Perspective</h3><p>How systemic changes transformed one school's approach to supporting neurodivergent students.</p></div><div class="ep-duration">55 min</div><button class="play-btn">▶</button></div>
+        <div class="podcast-ep"><div class="ep-num">EP 39</div><div class="ep-info"><h3>The Sensory World: What It Really Feels Like</h3><p>Autistic adults describe their sensory experiences and what creates more sensory-friendly environments.</p></div><div class="ep-duration">44 min</div><button class="play-btn">▶</button></div>
+        <div class="podcast-ep"><div class="ep-num">EP 38</div><div class="ep-info"><h3>Parenting the Child You Didn't Expect</h3><p>An honest conversation about parenting a neurodivergent child and the growth it brings.</p></div><div class="ep-duration">51 min</div><button class="play-btn">▶</button></div>
+      </div>
+      <div class="card-grid card-grid-3">
+        <div class="card"><div class="card-icon">🎧</div><h3>Spotify</h3><p>Stream all episodes — available on all devices.</p><br><button class="btn btn-outline" style="font-size:0.8rem;padding:0.5rem 1.2rem">Listen on Spotify</button></div>
+        <div class="card"><div class="card-icon">🍎</div><h3>Apple Podcasts</h3><p>Subscribe and never miss an episode.</p><br><button class="btn btn-outline" style="font-size:0.8rem;padding:0.5rem 1.2rem">Apple Podcasts</button></div>
+        <div class="card"><div class="card-icon">▶️</div><h3>YouTube</h3><p>Watch full video episodes on our channel.</p><br><button class="btn btn-outline" style="font-size:0.8rem;padding:0.5rem 1.2rem">Watch on YouTube</button></div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">HOPE</div>
+        <p class="footer-tagline">Redesigning the systems, not the people. Every voice counts, every mind matters.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('home');return false">Home</a>
+          <a href="#" onclick="showPage('about');return false">About</a>
+          <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
+          <a href="#" onclick="showPage('team');return false">Team</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Impact</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
+          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
+          <a href="#" onclick="showPage('storybook');return false">Storybook</a>
+          <a href="#" onclick="showPage('events');return false">Events</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 HOPE — Youth-Led Advocacy</p>
+      <div style="display:flex;gap:1.5rem">
+        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" style="color:inherit;text-decoration:none">Back to Top ↑</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══ BLOG ══ -->
+<div id="page-blog" class="page">
+  <section class="section">
+    <div class="container">
+      <span class="section-tag">Stories & Insights</span>
+      <h1 class="section-title">The HOPE <em>Blog</em></h1>
+      <p class="section-body">Perspectives from advocates, parents, educators, and neurodivergent voices on inclusion, belonging, and living authentically.</p>
+      <div class="rainbow-bar"></div>
+      <div class="card-grid card-grid-3" style="margin-top:2rem">
+        <div class="blog-card"><div class="blog-thumb" style="background:linear-gradient(135deg,var(--purple-l),var(--blue-l))">📝</div><div class="blog-body"><span class="blog-tag" style="background:var(--purple-l);color:var(--purple)">Advocacy</span><h3>Why "High-Functioning" is a Harmful Label</h3><p>Labels like "high-functioning" often mask real challenges while dismissing the support people need.</p><div class="blog-meta">March 12, 2025 · 6 min read</div></div></div>
+        <div class="blog-card"><div class="blog-thumb" style="background:linear-gradient(135deg,var(--orange-l),var(--pink-l))">🏫</div><div class="blog-body"><span class="blog-tag" style="background:var(--orange-l);color:var(--orange)">Education</span><h3>5 Ways Teachers Can Support Autistic Students This Year</h3><p>Simple, evidence-based adjustments that transform the classroom for neurodivergent learners.</p><div class="blog-meta">March 5, 2025 · 8 min read</div></div></div>
+        <div class="blog-card"><div class="blog-thumb" style="background:linear-gradient(135deg,var(--blue-l),var(--pink-l))">💬</div><div class="blog-body"><span class="blog-tag" style="background:var(--blue-l);color:var(--blue)">Community</span><h3>Finding My Tribe: An Autistic Adult's Story</h3><p>The life-changing moment of finding a community that understands and celebrates you.</p><div class="blog-meta">Feb 28, 2025 · 5 min read</div></div></div>
+        <div class="blog-card"><div class="blog-thumb" style="background:linear-gradient(135deg,var(--pink-l),var(--orange-l))">❤️</div><div class="blog-body"><span class="blog-tag" style="background:var(--pink-l);color:var(--pink)">Parenting</span><h3>When Your Child Is Diagnosed: The First Steps</h3><p>A compassionate guide for parents navigating the days following an autism diagnosis.</p><div class="blog-meta">Feb 20, 2025 · 10 min read</div></div></div>
+        <div class="blog-card"><div class="blog-thumb" style="background:linear-gradient(135deg,var(--purple-l),var(--orange-l))">🧠</div><div class="blog-body"><span class="blog-tag" style="background:var(--purple-l);color:var(--purple)">Mental Health</span><h3>Autistic Burnout: What It Is and How to Recover</h3><p>Autistic burnout is real, under-recognised, and different from ordinary tiredness.</p><div class="blog-meta">Feb 14, 2025 · 9 min read</div></div></div>
+        <div class="blog-card"><div class="blog-thumb" style="background:linear-gradient(135deg,var(--blue-l),var(--purple-l))">💼</div><div class="blog-body"><span class="blog-tag" style="background:var(--blue-l);color:var(--blue)">Workplace</span><h3>Disclosure at Work: Should You Tell Your Employer?</h3><p>Weighing the pros, cons, and practicalities of disclosing a neurodivergent identity at work.</p><div class="blog-meta">Feb 7, 2025 · 7 min read</div></div></div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">HOPE</div>
+        <p class="footer-tagline">Redesigning the systems, not the people. Every voice counts, every mind matters.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('home');return false">Home</a>
+          <a href="#" onclick="showPage('about');return false">About</a>
+          <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
+          <a href="#" onclick="showPage('team');return false">Team</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Impact</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
+          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
+          <a href="#" onclick="showPage('storybook');return false">Storybook</a>
+          <a href="#" onclick="showPage('events');return false">Events</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 HOPE — Youth-Led Advocacy</p>
+      <div style="display:flex;gap:1.5rem">
+        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" style="color:inherit;text-decoration:none">Back to Top ↑</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══ VOLUNTEER ══ -->
+<div id="page-volunteer" class="page">
+  <section class="section" style="padding-top: 15vh; position: relative; overflow: hidden;">
+    <!-- Abstract background elements -->
+    <div style="position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, var(--purple-l) 0%, transparent 70%); top: -10%; right: -10%; opacity: 0.15; filter: blur(80px); pointer-events: none;"></div>
+    <div style="position: absolute; width: 500px; height: 500px; background: radial-gradient(circle, var(--blue-l) 0%, transparent 70%); bottom: -5%; left: -5%; opacity: 0.15; filter: blur(80px); pointer-events: none;"></div>
+
+    <div class="container" style="text-align: center; position: relative; z-index: 1;">
+      <span class="section-tag reveal" style="margin-bottom: 2rem; display: inline-block;">CHOOSE YOUR SQUAD. CHANGE THE WORLD.</span>
+      <h1 class="section-title reveal" style="font-size: clamp(2.5rem, 8vw, 4.5rem); line-height: 1.1; margin-bottom: 2rem; letter-spacing: -0.04em;">We don’t do <em>"busy work"</em> <br>at HOPE. We do <span>impact.</span></h1>
+      <p class="section-body reveal" style="max-width: 800px; margin: 0 auto 5rem; font-size: 1.25rem; line-height: 1.8; opacity: 0.8;">We are a youth-led engine and we’re looking for the next generation of leaders to help us delete the barriers facing the neurodivergent community. One form. Four powerhouse teams. Which one is yours?</p>
+      
+      <div class="card-grid card-grid-2" style="margin-top:5rem; text-align: left; gap: 2.5rem;">
+        <div class="glass-card reveal" style="padding: 3.5rem; border-top: 8px solid var(--purple); transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s ease; cursor: pointer;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+            <div class="card-icon" style="background: var(--purple-l); color: var(--purple); width: 70px; height: 70px; font-size: 2rem; border-radius: 20px; display: grid; place-items: center;">🔬</div>
+            <span style="font-weight: 900; opacity: 0.1; font-size: 4rem; font-family: 'Space Grotesk';">01</span>
+          </div>
+          <h3 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 1.2rem; letter-spacing: -0.02em;">RESEARCH & <br>BLOGS TEAM</h3>
+          <p style="color: var(--muted); line-height: 1.8; font-size: 1.05rem;">Start the discovery. You’ll dive into the neurobiology of conditions like Autism, ADHD, and Epilepsy, bridging the gap between elite university research and real-world survival guides.</p>
+        </div>
+        
+        <div class="glass-card reveal" style="padding: 3.5rem; border-top: 8px solid var(--blue); transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s ease; cursor: pointer;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+            <div class="card-icon" style="background: var(--blue-l); color: var(--blue); width: 70px; height: 70px; font-size: 2rem; border-radius: 20px; display: grid; place-items: center;">📱</div>
+            <span style="font-weight: 900; opacity: 0.1; font-size: 4rem; font-family: 'Space Grotesk';">02</span>
+          </div>
+          <h3 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 1.2rem; letter-spacing: -0.02em;">SOCIAL MEDIA & <br>CONTENT TEAM</h3>
+          <p style="color: var(--muted); line-height: 1.8; font-size: 1.05rem;">Be the pulse of the movement. From managing our youtube channel to our instagram channel and creating viral advocacy, you’ll be the one who dismantles stigma on a global scale.</p>
+        </div>
+        
+        <div class="glass-card reveal" style="padding: 3.5rem; border-top: 8px solid var(--orange); transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s ease; cursor: pointer;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+            <div class="card-icon" style="background: var(--orange-l); color: var(--orange); width: 70px; height: 70px; font-size: 2rem; border-radius: 20px; display: grid; place-items: center;">🌍</div>
+            <span style="font-weight: 900; opacity: 0.1; font-size: 4rem; font-family: 'Space Grotesk';">03</span>
+          </div>
+          <h3 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 1.2rem; letter-spacing: -0.02em;">CAMPAIGN & VOLUNTEER <br>ORGANIZING</h3>
+          <p style="color: var(--muted); line-height: 1.8; font-size: 1.05rem;">The boots on the ground. You’ll help manage our growing community, organize events and campaigns, and enjoy the movements to the fullest.</p>
+        </div>
+        
+        <div class="glass-card reveal" style="padding: 3.5rem; border-top: 8px solid var(--pink); transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s ease; cursor: pointer;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+            <div class="card-icon" style="background: var(--pink-l); color: var(--pink); width: 70px; height: 70px; font-size: 2rem; border-radius: 20px; display: grid; place-items: center;">🎓</div>
+            <span style="font-weight: 900; opacity: 0.1; font-size: 4rem; font-family: 'Space Grotesk';">04</span>
+          </div>
+          <h3 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 1.2rem; letter-spacing: -0.02em;">INCLUSION TOOLKIT <br>TEAM</h3>
+          <p style="color: var(--muted); line-height: 1.8; font-size: 1.05rem;">Drive the revolution in education. You’ll be the force behind our free certification course, helping schools across the globe flip the script on classroom inclusion.</p>
+        </div>
+      </div>
+
+      <div class="reveal" style="margin-top: 8rem; background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%); padding: 6rem 4rem; border-radius: 50px; border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden;">
+        <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at center, var(--purple-l) 0%, transparent 70%); opacity: 0.1; pointer-events: none;"></div>
+        
+        <h2 class="section-title" style="font-size: 3rem; margin-bottom: 4rem;">WHY <em>JOIN US?</em></h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin-bottom: 5rem;">
+          <div class="reveal" style="text-align: center;">
+            <div style="font-size: 2.5rem; margin-bottom: 1.5rem;">👑</div>
+            <h4 style="font-weight: 900; color: var(--purple); font-size: 1.3rem; margin-bottom: 1rem; letter-spacing: -0.02em;">Build a Legacy</h4>
+            <p style="font-size: 1rem; color: var(--muted); line-height: 1.6;">Hands-on leadership that looks incredible on Ivy League apps and elite portfolios.</p>
+          </div>
+          <div class="reveal" style="text-align: center;">
+            <div style="font-size: 2.5rem; margin-bottom: 1.5rem;">🌎</div>
+            <h4 style="font-weight: 900; color: var(--blue); font-size: 1.3rem; margin-bottom: 1rem; letter-spacing: -0.02em;">Global Network</h4>
+            <p style="font-size: 1rem; color: var(--muted); line-height: 1.6;">Connect with a high-impact network of teenage advocates from London to Tokyo.</p>
+          </div>
+          <div class="reveal" style="text-align: center;">
+            <div style="font-size: 2.5rem; margin-bottom: 1.5rem;">🕊️</div>
+            <h4 style="font-weight: 900; color: var(--pink); font-size: 1.3rem; margin-bottom: 1rem; letter-spacing: -0.02em;">Zero Barriers</h4>
+            <p style="font-size: 1rem; color: var(--muted); line-height: 1.6;">We don’t care about your resume; we care about your drive to change the status quo.</p>
+          </div>
+        </div>
+        
+        <div class="reveal" style="position: relative; z-index: 2;">
+          <p style="font-weight: 800; margin-bottom: 3rem; font-size: 1.5rem; letter-spacing: -0.02em;">The world is waiting. Pick your team and let's get to work.</p>
+          <button class="btn btn-primary" style="padding: 1.5rem 5rem; font-size: 1.25rem; border-radius: 100px; box-shadow: 0 25px 50px -12px rgba(123,53,194,0.5);" onclick="window.open('https://forms.gle/np9T7J7mCri7RpbS6', '_blank')">SIGN UP FOR THE SQUAD</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">HOPE</div>
+        <p class="footer-tagline">Redesigning the systems, not the people. Every voice counts, every mind matters.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('home');return false">Home</a>
+          <a href="#" onclick="showPage('about');return false">About</a>
+          <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
+          <a href="#" onclick="showPage('team');return false">Team</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Impact</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
+          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
+          <a href="#" onclick="showPage('storybook');return false">Storybook</a>
+          <a href="#" onclick="showPage('events');return false">Events</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 HOPE — Youth-Led Advocacy</p>
+      <div style="display:flex;gap:1.5rem">
+        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" style="color:inherit;text-decoration:none">Back to Top ↑</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══ STORYBOOK ══ -->
+<div id="page-storybook" class="page">
+  <section class="section" style="padding-top: 15vh; position: relative; overflow: hidden;">
+    <!-- Decorative quote marks in background -->
+    <div style="position: absolute; top: 10%; left: 5%; font-family: serif; font-size: 25rem; opacity: 0.03; line-height: 1; pointer-events: none; color: var(--purple);">“</div>
+    <div style="position: absolute; bottom: 10%; right: 5%; font-family: serif; font-size: 25rem; opacity: 0.03; line-height: 1; pointer-events: none; color: var(--blue);">”</div>
+
+    <div class="container" style="position: relative; z-index: 1;">
+      <div style="text-align: center; margin-bottom: 6rem;">
+        <span class="section-tag reveal" style="margin-bottom: 2rem; display: inline-block; background: var(--purple-l); color: var(--purple); padding: 0.8rem 2rem; border-radius: 50px;">Autism: Life Off Script</span>
+        <h1 class="section-title reveal" style="font-size: clamp(3rem, 8vw, 5.5rem); line-height: 1; letter-spacing: -0.05em;">"Lily is not <em>broken.</em>"</h1>
+        <p class="section-body reveal" style="margin-top: 1.5rem; font-size: 1.4rem; font-weight: 500; opacity: 0.7;">A Diary of Survival, Stigma, and the Strength of Being Different.</p>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 8rem; align-items: start; margin-top: 5rem; text-align: left; position: relative;">
+        <!-- Interactive Book Cover -->
+        <div style="perspective: 2000px; position: sticky; top: 15vh; height: fit-content; will-change: transform; z-index: 10;">
+          <div class="book-container" style="width: 100%; height: 650px; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); cursor: pointer;" id="interactive-book">
+            <!-- Book Spine (Left Edge) -->
+            <div style="position: absolute; left: 0; top: 0; width: 60px; height: 100%; background: #1a1622; transform: rotateY(-90deg) translateX(-30px); transform-origin: left; border-radius: 5px 0 0 5px; box-shadow: inset -10px 0 30px rgba(0,0,0,0.5); z-index: 1;"></div>
+            
+            <!-- Book Front Cover -->
+            <div class="book-cover" style="width: 100%; height: 100%; background: url('images/Book.png') center/cover no-repeat; border-radius: 5px 30px 30px 5px; box-shadow: 20px 20px 60px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; position: relative; z-index: 2; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; padding-bottom: 4rem; transform-style: preserve-3d;">
+              <!-- Gloss Overly -->
+              <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.1) 45%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 55%, transparent 60%); pointer-events: none;"></div>
+              
+              <div style="width: 85%; position: relative; z-index: 3; transform: translateZ(40px);">
+                <a href="https://www.amazon.com/Autism-Script-Stories-Never-Textbooks/dp/B0GHXHW55C/ref=tmm_pap_swatch_0" target="_blank" class="btn btn-primary" style="background: white; color: #1a1622; font-weight: 900; width: 100%; border: none; box-shadow: 0 20px 40px rgba(0,0,0,0.4); padding: 1.5rem; border-radius: 20px; font-size: 1.1rem; letter-spacing: 0.05em; transition: all 0.3s ease; text-transform: uppercase;">ORDER NOW</a>
+              </div>
+            </div>
+            
+            <!-- Shadow Plane (Lies flat under the book) -->
+            <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.2); filter: blur(40px); transform: translateZ(-50px) translateY(20px); pointer-events: none;"></div>
+          </div>
+        </div>
+
+        <div class="reveal" style="padding-top: 2rem;">
+          <h2 class="section-title" style="font-size: 2.8rem; margin-bottom: 2.5rem; line-height: 1.1; letter-spacing: -0.03em;">Most books talk <em>about</em> autism. <br><span style="color: var(--blue);">This book lets you live it.</span></h2>
+          <p class="section-body" style="text-align: left; margin-bottom: 4rem; font-size: 1.25rem; line-height: 1.8; opacity: 0.85;">Meet Lily. She’s fourteen, she’s sharp, and she’s trying to navigate a world that feels like it’s turned the volume up to 100. Through her secret diary, you’ll experience the "earthquakes" of loud noises, the betrayal of an oatmeal cookie, and the exhaustion of being treated like a "lesson" instead of a person.</p>
+          
+          <div style="background: linear-gradient(135deg, var(--purple-l) 0%, transparent 100%); border-left: 8px solid var(--purple); padding: 4rem 3rem; margin-bottom: 5rem; border-radius: 0 40px 40px 0; position: relative; overflow: visible;">
+            <div style="position: absolute; top: -30px; left: 10px; font-family: serif; font-size: 10rem; opacity: 0.15; color: var(--purple); line-height: 1;">“</div>
+            <p style="font-size: 1.8rem; font-weight: 800; color: var(--text); line-height: 1.4; font-style: italic; letter-spacing: -0.02em; position: relative; z-index: 1;">
+              I don’t want to be included because I’m autistic. <br>I want to be included because I’m Lily.
+            </p>
+          </div>
+
+          <h3 style="font-weight: 900; margin-bottom: 3rem; color: var(--purple); font-size: 1.6rem; letter-spacing: -0.02em; display: flex; align-items: center; gap: 1rem;">
+            <span style="height: 2px; width: 40px; background: var(--purple); display: inline-block;"></span>
+            Inside the Diary
+          </h3>
+          
+          <div style="display: grid; gap: 2.5rem;">
+            <div class="glass-card reveal" style="padding: 2.5rem; border-left: 6px solid var(--purple); background: var(--surface); box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+              <h4 style="font-weight: 900; margin-bottom: 0.8rem; color: var(--text); font-size: 1.3rem;">The Unfiltered Truth</h4>
+              <p style="font-size: 1.1rem; color: var(--muted); line-height: 1.7;">Go inside a "meltdown" and understand that it’s not a tantrum—it’s a brain overwhelmed by electrical signals it can't control.</p>
+            </div>
+            <div class="glass-card reveal" style="padding: 2.5rem; border-left: 6px solid var(--blue); background: var(--surface); box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+              <h4 style="font-weight: 900; margin-bottom: 0.8rem; color: var(--text); font-size: 1.3rem;">The "Split Personality" Myth</h4>
+              <p style="font-size: 1.1rem; color: var(--muted); line-height: 1.7;">See the world through the eyes of a girl who is tired of being told she has a "sweet" side and a "violent" side.</p>
+            </div>
+            <div class="glass-card reveal" style="padding: 2.5rem; border-left: 6px solid var(--pink); background: var(--surface); box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+              <h4 style="font-weight: 900; margin-bottom: 0.8rem; color: var(--text); font-size: 1.3rem;">The "Human" Question</h4>
+              <p style="font-size: 1.1rem; color: var(--muted); line-height: 1.7;">Experience the sting of being called "mentally unstable" or "possessed" by those who refuse to see the human soul.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" style="margin-top: 12rem; text-align: center; max-width: 1100px; margin-left: auto; margin-right: auto; background: var(--bg2); padding: 8rem 5rem; border-radius: 80px; border: 1px solid var(--border); position: relative; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.05);">
+        <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at top right, var(--blue-l), transparent 70%); pointer-events: none;"></div>
+        <div style="position: absolute; bottom:0; left:0; width:100%; height:100%; background: radial-gradient(circle at bottom left, var(--purple-l), transparent 70%); pointer-events: none;"></div>
+        
+        <h2 class="section-title" style="font-size: 4rem; margin-bottom: 2rem; letter-spacing: -0.04em;">"Am I <em>Rude or Honest?</em>"</h2>
+        <p class="section-body" style="margin-bottom: 5rem; font-size: 1.4rem; max-width: 850px;">Lily doesn't do "comfortable lies." She notices the cracks in the tiles, the flickering lights, and the sadness behind people's smiles. Her story is a journey for anyone who has ever felt like they were wired differently.</p>
+        
+        <div style="display: inline-block; padding: 4rem 6rem; background: linear-gradient(135deg, var(--purple), #3B5FD4); border-radius: 50px; box-shadow: 0 50px 100px -20px rgba(59, 95, 212, 0.5); position: relative; z-index: 2;">
+          <h3 style="font-size: 2.2rem; margin-bottom: 1.5rem; color: white; font-weight: 900; letter-spacing: -0.03em; line-height: 1.2;">Stop Reading the Reports. <em>Start Reading the Story.</em></h3>
+          <p style="font-size: 1.2rem; opacity: 0.9; color: white; margin-bottom: 3rem;">Autism: Life Off Script is more than a book—it’s a challenge to the world.</p>
+          <a href="https://www.amazon.com/Autism-Script-Stories-Never-Textbooks/dp/B0GHXHW55C/ref=tmm_pap_swatch_0" target="_blank" class="btn btn-primary" style="background: white; color: #3B5FD4; padding: 1.5rem 4rem; font-size: 1.1rem; border-radius: 20px; font-weight: 900;">ORDER THE DIARY ON AMAZON</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══ EVENTS ══ -->
+<div id="page-events" class="page">
+  <section class="section">
+    <div class="container">
+      <span class="section-tag">National Presence</span>
+      <h1 class="section-title">Major <em>Engagements</em></h1>
+      <p class="section-body">HOPE is at the forefront of national leadership and advocacy.</p>
+      <div class="rainbow-bar"></div>
+      <div style="margin-top:2.5rem">
+        <div class="event-item reveal"><div class="event-date"><div class="day">2026</div><div class="mon">Summit</div></div><div class="event-info"><span class="event-tag">Leadership</span><h3>CALS 2026 — Canada's Largest Leadership Summit</h3><p>HOPE is proud to serve as an advisory member and organizer for this landmark event, ensuring neuro-inclusion is at the heart of the national conversation.</p></div></div>
+      </div>
+      <div style="text-align:center;margin-top:3rem"><button class="btn btn-primary" onclick="showPage('volunteer')">Help Us Organize</button></div>
+    </div>
+  </section>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">HOPE</div>
+        <p class="footer-tagline">Redesigning the systems, not the people. Every voice counts, every mind matters.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('home');return false">Home</a>
+          <a href="#" onclick="showPage('about');return false">About</a>
+          <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
+          <a href="#" onclick="showPage('team');return false">Team</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Impact</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
+          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
+          <a href="#" onclick="showPage('storybook');return false">Storybook</a>
+          <a href="#" onclick="showPage('events');return false">Events</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 HOPE — Youth-Led Advocacy</p>
+      <div style="display:flex;gap:1.5rem">
+        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" style="color:inherit;text-decoration:none">Back to Top ↑</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══ TEAM ══ -->
+<div id="page-team" class="page">
+  <section class="section" style="padding-top: 15vh;">
+    <div class="container">
+      <div class="reveal" style="text-align: center; margin-bottom: 6rem;">
+        <span class="section-tag" style="margin-bottom: 1.5rem; display: inline-block;">LEADERSHIP & VISION</span>
+        <h1 class="section-title" style="font-size: clamp(2.5rem, 8vw, 4.5rem); line-height: 1; letter-spacing: -0.04em;">The Strategic <em>Squads</em></h1>
+        <p class="section-body" style="max-width: 800px; margin: 2rem auto 0; font-size: 1.2rem; line-height: 1.8; opacity: 0.8;">Meet the directors and leads driving our national advocacy, research, and outreach efforts. We aren't here to "fix" people; we are here to fix a broken world.</p>
+      </div>
+
+      <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; margin-top: 4rem;">
+        <!-- Research & Tech -->
+        <div class="glass-card reveal" style="padding: 3rem; border-top: 6px solid var(--purple); transition: transform 0.5s ease; cursor: default;">
+          <div style="width: 80px; height: 80px; background: var(--purple-l); border-radius: 20px; display: grid; place-items: center; font-size: 2.5rem; margin-bottom: 2rem;">🔬</div>
+          <h3 style="font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--purple); font-weight: 900; letter-spacing: -0.02em;">Research & Tech</h3>
+          <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--text);">Niveditt Basrani</p>
+          <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; background: var(--purple); color: #fff; padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 900; display: inline-block;">Director</span>
+          <p style="font-size: 1rem; color: var(--muted); margin-top: 2rem; line-height: 1.8;">Translating university-level neurological research into survival guides and inclusive technological solutions.</p>
+        </div>
+
+        <!-- Campaign & Volunteer -->
+        <div class="glass-card reveal" style="padding: 3rem; border-top: 6px solid var(--blue); transition: transform 0.5s ease; cursor: default;">
+          <div style="width: 80px; height: 80px; background: var(--blue-l); border-radius: 20px; display: grid; place-items: center; font-size: 2.5rem; margin-bottom: 2rem;">🚀</div>
+          <h3 style="font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--blue); font-weight: 900; letter-spacing: -0.02em;">Campaign & Volunteer</h3>
+          <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--text);">Aryaveer Singh</p>
+          <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; background: var(--blue); color: #fff; padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 900; display: inline-block;">Director</span>
+          <p style="font-size: 1rem; color: var(--muted); margin-top: 2rem; line-height: 1.8;">Leading "boots on the ground" efforts for major national events including the CALS 2026 Leadership Summit.</p>
+        </div>
+
+        <!-- Inclusion Toolkit -->
+        <div class="glass-card reveal" style="padding: 3rem; border-top: 6px solid var(--orange); transition: transform 0.5s ease; cursor: default;">
+          <div style="width: 80px; height: 80px; background: var(--orange-l); border-radius: 20px; display: grid; place-items: center; font-size: 2.5rem; margin-bottom: 2rem;">🧰</div>
+          <h3 style="font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--orange); font-weight: 900; letter-spacing: -0.02em;">Inclusion Toolkit</h3>
+          <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--text);">Harshit Ramamurthy</p>
+          <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; background: var(--orange-l); color: var(--orange); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 900; border: 1.5px solid rgba(212,146,74,0.3); display: inline-block;">Director</span>
+          <p style="font-size: 1rem; color: var(--muted); margin-top: 2rem; line-height: 1.8;">Developing the global standard for neuro-inclusion certifications and primary educational resources for schools.</p>
+        </div>
+
+        <!-- Social Media & Content -->
+        <div class="glass-card reveal" style="padding: 3rem; border-top: 6px solid var(--pink); transition: transform 0.5s ease; cursor: default;">
+          <div style="width: 80px; height: 80px; background: var(--pink-l); border-radius: 20px; display: grid; place-items: center; font-size: 2.5rem; margin-bottom: 2rem;">📱</div>
+          <h3 style="font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--pink); font-weight: 900; letter-spacing: -0.02em;">Social Media & Content</h3>
+          <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--text);">Krishna Karthik Nataraj</p>
+          <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; background: var(--pink-l); color: var(--pink); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 900; border: 1.5px solid rgba(212,88,112,0.3); display: inline-block;">Lead</span>
+          <p style="font-size: 1rem; color: var(--muted); margin-top: 2rem; line-height: 1.8;">Dismantling high-level stigma through global advocacy campaigns across Instagram and YouTube platforms.</p>
+        </div>
+      </div>
+
+      <div class="reveal" style="text-align:center; margin-top: 10rem; padding: 6rem 4rem; background: var(--bg2); border-radius: 50px; border: 1px solid rgba(255,255,255,0.05);">
+        <h3 style="font-size: 2.2rem; margin-bottom: 2rem; font-weight: 900; letter-spacing: -0.02em;">Want to lead a <em>global squad?</em></h3>
+        <p class="section-body" style="margin-bottom: 3.5rem;">The application to join the leadership team or a specific department is always open for those ready to commit.</p>
+        <button class="btn btn-primary" style="padding: 1.2rem 4rem; font-size: 1.2rem; border-radius: 100px;" onclick="window.open('https://forms.gle/np9T7J7mCri7RpbS6', '_blank')">Apply to Join the Team</button>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">HOPE</div>
+        <p class="footer-tagline">Redesigning the systems, not the people. Every voice counts, every mind matters.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('home');return false">Home</a>
+          <a href="#" onclick="showPage('about');return false">About</a>
+          <a href="#" onclick="showPage('toolkit');return false">Toolkit</a>
+          <a href="#" onclick="showPage('team');return false">Team</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Impact</h4>
+        <div class="footer-links">
+          <a href="#" onclick="showPage('volunteer');return false">Volunteer</a>
+          <a href="#" onclick="showPage('podcast');return false">Podcast</a>
+          <a href="#" onclick="showPage('storybook');return false">Storybook</a>
+          <a href="#" onclick="showPage('events');return false">Events</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 HOPE — Youth-Led Advocacy</p>
+      <div style="display:flex;gap:1.5rem">
+        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" style="color:inherit;text-decoration:none">Back to Top ↑</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+const pages=['home','about','toolkit','podcast','blog','volunteer','storybook','events','team'];
+let isDark=false;
+
+function showPage(id){
+  pages.forEach(p=>{
+    document.getElementById('page-'+p).classList.toggle('active',p===id);
+    const b=document.getElementById('nav-'+p);
+    if(b)b.classList.toggle('active',p===id);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='about')setTimeout(animateAbout,400);
+}
+
+function toggleMenu(){
+  const m=document.getElementById('mobileMenu');
+  const h=document.getElementById('ham');
+  const o=m.classList.toggle('open');
+  h.textContent=o?'✕':'☰';
+}
+
+function toggleTheme(){
+  isDark=!isDark;
+  document.documentElement.setAttribute('data-theme',isDark?'dark':'light');
+  document.getElementById('themeBtn').textContent=isDark?'☀️':'🌙';
+}
+
+function switchTab(name,btn){
+  document.querySelectorAll('.toolkit-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+function animateAbout(){
+  const sections=document.querySelectorAll('.about-section');
+  sections.forEach((s,i)=>{
+    setTimeout(()=>s.classList.add('visible'),i*200);
+  });
+}
+
+function submitForm(){
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// CINEMATIC CURSOR & INTERACTIONS
+const loader = document.getElementById('loader');
+const progress = document.getElementById('loader-progress');
+
+// Loader Logic
+window.addEventListener('load', () => {
+  let width = 0;
+  const interval = setInterval(() => {
+    width += Math.random() * 20;
+    if (width >= 100) {
+      width = 100;
+      clearInterval(interval);
+      setTimeout(() => {
+        loader.classList.add('loaded');
+        document.body.classList.remove('loading');
+      }, 500);
+    }
+    progress.style.width = width + '%';
+  }, 100);
+});
+
+// Scroll Navbar Effect
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  if (window.scrollY > 50) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+});
+
+const cursorDot = document.getElementById('cursor-dot');
+const cursorOutline = document.getElementById('cursor-outline');
+let mouseX = 0, mouseY = 0;
+let dotX = 0, dotY = 0;
+let outlineX = 0, outlineY = 0;
+
+window.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+
+// Cinematic Reveal on Scroll
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -80px 0px'
+};
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('active');
+        // Trigger counter animation if it's a stat-num
+        const counter = entry.target.querySelector('.stat-num');
+        if (counter) animateCounter(counter);
+        if (entry.target.classList.contains('stat-num')) animateCounter(entry.target);
+      }, i * 50); // Staggered reveal
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+
+function animateCounter(el) {
+  const target = +el.getAttribute('data-target');
+  const suffix = el.getAttribute('data-suffix') || '';
+  if (isNaN(target)) return;
+  
+  let current = 0;
+  const duration = 2000; // 2 seconds
+  const start = performance.now();
+  
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    
+    // Ease out expo
+    const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+    current = Math.floor(easeProgress * target);
+    
+    el.textContent = current + suffix;
+    
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      el.textContent = target + suffix;
+    }
+  }
+  requestAnimationFrame(update);
+}
+
+document.querySelectorAll('.reveal, .section, .card, .stat, .pillar, .event-item, .about-section, footer, .founder-card, .pillar-grid > div').forEach(el => {
+  el.classList.add('reveal');
+  revealObserver.observe(el);
+});
+
+// Cursor animation loop
+let isHovering = false;
+document.querySelectorAll('a, button, .card, .btn').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    isHovering = true;
+    cursorOutline.classList.add('cursor-hover');
+  });
+  el.addEventListener('mouseleave', () => {
+    isHovering = false;
+    cursorOutline.classList.remove('cursor-hover');
+  });
+});
+
+function animateCursor() {
+  dotX += (mouseX - dotX) * 0.25;
+  dotY += (mouseY - dotY) * 0.25;
+  outlineX += (mouseX - outlineX) * 0.12;
+  outlineY += (mouseY - outlineY) * 0.12;
+  
+  cursorDot.style.transform = `translate3d(${dotX}px, ${dotY}px, 0)`;
+  cursorOutline.style.transform = `translate3d(${outlineX}px, ${outlineY}px, 0) ${isHovering ? 'scale(2)' : 'scale(1)'}`;
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// 3D Book Interactive Effect
+function initBook3D() {
+  const book = document.getElementById('interactive-book');
+  if (!book) return;
+
+  book.addEventListener('mousemove', (e) => {
+    const rect = book.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    
+    // Smooth 3D tilt based on mouse position relative to center
+    const rotateY = (x / (rect.width / 2)) * 30; // Max 30deg
+    const rotateX = -(y / (rect.height / 2)) * 20; // Max 20deg
+    
+    book.style.transform = `perspective(2000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+  });
+
+  book.addEventListener('mouseleave', () => {
+    book.style.transform = `perspective(2000px) rotateX(0deg) rotateY(-5deg) scale3d(1, 1, 1)`;
+  });
+}
+initBook3D();
+
+// Magnetic Effect for Glass Panels
+document.querySelectorAll('.hero-glass, .glass-card').forEach(el => {
+  el.addEventListener('mousemove', (e) => {
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    el.style.transform = `perspective(1000px) rotateY(${x / 30}deg) rotateX(${-y / 30}deg) translateZ(10px)`;
+  });
+  el.addEventListener('mouseleave', () => {
+    el.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg) translateZ(0)`;
+  });
+});
+
+
+// Hover effect
+document.querySelectorAll('a, button, .btn, .card, .podcast-ep, .event-item').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+});
+
+// PARTICLES SYSTEM
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resize() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+class Particle {
+  constructor() {
+    this.reset();
+  }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 1.5 + 0.5;
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.speedY = (Math.random() - 0.5) * 0.3;
+    this.color = ['#7B35C2', '#3B5FD4', '#D4924A', '#D45870'][Math.floor(Math.random() * 4)];
+    this.opacity = Math.random() * 0.3 + 0.1;
+  }
+  update() {
+    const dx = this.x - mouseX;
+    const dy = this.y - mouseY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 200) {
+      this.x += dx / 40;
+      this.y += dy / 40;
+    }
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+  }
+  draw() {
+    ctx.globalAlpha = this.opacity;
+    ctx.fillStyle = this.color;
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+}
+
+function initParticles() {
+  particles = [];
+  const count = Math.min(80, Math.floor((canvas.width * canvas.height) / 15000));
+  for (let i = 0; i < count; i++) particles.push(new Particle());
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let i = 0; i < particles.length; i++) {
+    particles[i].update();
+    particles[i].draw();
+  }
+  requestAnimationFrame(animateParticles);
+}
+
+initParticles();
+animateParticles();
+</script>
+</body>
+</html>
